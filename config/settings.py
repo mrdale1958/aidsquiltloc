@@ -23,24 +23,29 @@ class Settings:
     
     # Request settings
     request_timeout: int = 30
-    max_concurrent_downloads: int = 3  # Reduced for more conservative API usage
-    rate_limit_delay: float = 2.0  # Increased delay between requests
+    max_concurrent_downloads: int = 1  # Keep at 1 to avoid rate limiting
+    rate_limit_delay: float = 30.0  # 30 seconds between requests - works with LOC
+    
+    # Image download settings (separate from API rate limits)
+    image_download_delay: float = 1.0  # Much faster for image downloads
+    max_concurrent_image_downloads: int = 5  # More concurrent downloads for images
     
     # File paths
     base_dir: Path = Path(__file__).parent.parent
     output_dir: Path = base_dir / "output"
     images_dir: Path = output_dir / "images"
     metadata_dir: Path = output_dir / "metadata"
+    database_path: Path = base_dir / "quilt_records.db"
     
     # Image settings
     max_image_size_mb: int = 50
-    supported_image_formats: tuple = ('.jpg', '.jpeg', '.png', '.tiff', '.tif')
+    supported_image_formats: tuple = ('.jpg', '.jpeg', '.png', '.tiff', '.tif', '.jp2')
     
     # Metadata settings
     metadata_format: str = "json"  # json or csv
     
     # Logging
-    log_level: str = os.getenv("LOG_LEVEL", "INFO")
+    log_level: str = os.getenv("LOG_LEVEL", "DEBUG")
     log_file: str = "scraper.log"
     
     # Optional API key (if needed for higher rate limits)

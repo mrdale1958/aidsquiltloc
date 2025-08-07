@@ -82,52 +82,113 @@ def db_record_to_response(record, row_id: int) -> QuiltRecordResponse:
         if isinstance(field_value, str):
             try:
                 parsed = json.loads(field_value)
-                return parsed if isinstance(parsed, list) else [parsed] if parsed else []
+                # Handle nested dictionaries in subjects/contributors
+                if isinstance(parsed, list):
+                    result = []
+                    for item in parsed:
+                        if isinstance(item, dict):
+                            # Extract keys from dictionary (the actual subject/contributor name)
+                            result.extend([str(key) for key in item.keys() if key])
+                        elif item is not None:
+                            result.append(str(item))
+                    return result
+                elif isinstance(parsed, dict):
+                    # Extract keys from dictionary
+                    return [str(key) for key in parsed.keys() if key]
+                elif parsed is not None:
+                    return [str(parsed)]
+                else:
+                    return []
             except json.JSONDecodeError:
-                return [field_value] if field_value else []
-        return field_value if isinstance(field_value, list) else []
+                return [str(field_value)] if field_value else []
+        elif isinstance(field_value, list):
+            result = []
+            for item in field_value:
+                if isinstance(item, dict):
+                    result.extend([str(key) for key in item.keys() if key])
+                elif item is not None:
+                    result.append(str(item))
+            return result
+        elif field_value is not None:
+            return [str(field_value)]
+        return []
     
-    # Extract subjects
-    subjects = safe_json_parse(record.subject, [])
+    # Extract subjects safely
+    try:
+        subjects = safe_json_parse(record.subject, [])
+    except Exception:
+        subjects = []
     
     # Extract names (combine memorial_names and contributors)
     names = []
-    if record.memorial_names:
-        memorial_names = safe_json_parse(record.memorial_names, [])
-        names.extend(memorial_names)
-    if record.contributor:
-        contributors = safe_json_parse(record.contributor, [])
-        names.extend(contributors)
-    if record.panel_maker:
-        names.append(record.panel_maker)
+    try:
+        if record.memorial_names:
+            memorial_names = safe_json_parse(record.memorial_names, [])
+            names.extend(memorial_names)
+    except Exception:
+        pass
     
-    # Extract dates
+    try:
+        if record.contributor:
+            contributors = safe_json_parse(record.contributor, [])
+            names.extend(contributors)
+    except Exception:
+        pass
+    
+    try:
+        if record.panel_maker:
+            names.append(str(record.panel_maker))
+    except Exception:
+        pass
+    
+    # Extract dates safely
     dates = []
-    if record.date_created:
-        dates.append(str(record.date_created))
+    try:
+        if record.date_created:
+            dates.append(str(record.date_created))
+    except Exception:
+        pass
     
-    # Get first image URL
-    image_urls = safe_json_parse(record.image_urls, [])
-    first_image_url = image_urls[0] if image_urls else None
+    # Get first image URL safely
+    try:
+        image_urls = safe_json_parse(record.image_urls, [])
+        first_image_url = image_urls[0] if image_urls else None
+    except Exception:
+        first_image_url = None
     
-    # Parse description
+    # Parse description safely
     description = ""
-    if record.description:
-        desc_list = safe_json_parse(record.description, [])
-        description = desc_list[0] if desc_list and desc_list[0] else ""
+    try:
+        if record.description:
+            desc_list = safe_json_parse(record.description, [])
+            description = desc_list[0] if desc_list and desc_list[0] else ""
+    except Exception:
+        description = ""
+    
+    # Remove duplicates from names safely
+    try:
+        unique_names = []
+        seen = set()
+        for name in names:
+            if name and name not in seen:
+                unique_names.append(name)
+                seen.add(name)
+        names = unique_names
+    except Exception:
+        names = names if names else []
     
     return QuiltRecordResponse(
         id=row_id,
-        item_id=record.item_id,
+        item_id=record.item_id or "",
         title=record.title or "",
         description=description,
         subjects=subjects,
-        names=list(set(names)) if names else [],  # Remove duplicates
+        names=names,
         dates=dates,
-        url=record.loc_url,
+        url=record.loc_url or "",
         image_url=first_image_url,
         image_path=None,  # We don't have local paths yet
-        content_hash=record.content_hash,
+        content_hash=record.content_hash or "",
         created_at=record.first_seen.isoformat() if record.first_seen else "",
         updated_at=record.last_updated.isoformat() if record.last_updated else None
     )

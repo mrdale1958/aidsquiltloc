@@ -73,6 +73,11 @@ class LOCAPIClient:
                     return data
                     
             except aiohttp.ClientError as e:
+                # Don't retry 404s - item doesn't exist
+                if hasattr(e, 'status') and e.status == 404:
+                    logger.error("HTTP error for %s: %s", url, e)
+                    raise
+                    
                 if attempt < max_retries:
                     delay = (2 ** attempt) * self.settings.rate_limit_delay
                     logger.warning("HTTP error for %s: %s, retrying in %s seconds", url, e, delay)

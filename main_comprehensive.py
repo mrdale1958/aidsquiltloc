@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """
-Enhanced AIDS Memorial Quilt Records Scraper with database integration
-Scrapes images and metadata from the Library of Congress collection with incremental updates
+Run a comprehensive scrape of the AIDS Memorial Quilt collection
 """
 
 import asyncio
 import logging
 import sys
 from pathlib import Path
-from typing import List, Dict, Any
 
 # Add src and config to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
@@ -70,7 +68,7 @@ class AIDSQuiltScraper:
             self.logger.info("Starting full scrape of AIDS Memorial Quilt collection")
             
             # Get initial stats
-            initial_stats = await self.db_manager.get_stats()
+            initial_stats = await self.db_manager.get_statistics()
             self.logger.info("Initial database stats: %s", initial_stats)
             
             # Scrape all metadata
@@ -81,45 +79,12 @@ class AIDSQuiltScraper:
                 await self._download_missing_images()
             
             # Get final stats
-            final_stats = await self.db_manager.get_stats()
+            final_stats = await self.db_manager.get_statistics()
             self.logger.info("Final database stats: %s", final_stats)
             self.logger.info("Scrape statistics: %s", self.stats)
             
         except Exception as e:
             self.logger.error("Error in full scrape: %s", e)
-            raise
-        finally:
-            await self._cleanup()
-    
-    async def run_incremental_update(self, hours_since_check: int = 24, download_images: bool = True):
-        """
-        Run an incremental update to check for changes
-        
-        Args:
-            hours_since_check: Only check items not checked in this many hours
-            download_images: Whether to download new images
-        """
-        try:
-            # Initialize database
-            self.db_manager.initialize_database()
-            
-            self.logger.info("Starting incremental update (checking items not seen in %d hours)", hours_since_check)
-            
-            # Get items that need updating
-            items_to_check = await self.db_manager.get_records_needing_updates(hours_since_check)
-            self.logger.info("Found %d items to check for updates", len(items_to_check))
-            
-            if items_to_check:
-                await self._update_specific_items(items_to_check)
-            
-            # Download missing images if requested
-            if download_images:
-                await self._download_missing_images()
-            
-            self.logger.info("Incremental update completed: %s", self.stats)
-            
-        except Exception as e:
-            self.logger.error("Error in incremental update: %s", e)
             raise
         finally:
             await self._cleanup()
@@ -169,29 +134,7 @@ class AIDSQuiltScraper:
                 # Continue with next batch
                 start += batch_size
     
-    async def _update_specific_items(self, item_ids: List[str]):
-        """Update specific items by their IDs"""
-        
-        for item_id in item_ids:
-            try:
-                # Get current item details
-                item_details = await self.api_client.get_item_details(item_id)
-                
-                # Create a basic item structure for processing
-                item_data = {
-                    'id': f"https://www.loc.gov/item/{item_id}/",
-                    'title': item_details.get('title', ''),
-                    # Add other fields as available
-                }
-                
-                await self._process_single_item(item_data, item_details)
-                self.stats['items_processed'] += 1
-                
-            except Exception as e:
-                self.logger.error("Error updating item %s: %s", item_id, e)
-                self.stats['errors'] += 1
-    
-    async def _process_single_item(self, item_data: Dict[str, Any], item_details: Dict[str, Any] = None):
+    async def _process_single_item(self, item_data, item_details=None):
         """Process a single item: extract metadata and optionally get detailed info"""
         try:
             # Extract item ID
@@ -258,8 +201,8 @@ async def main():
     """Main entry point"""
     scraper = AIDSQuiltScraper()
     
-    # Run a small test scrape
-    await scraper.run_full_scrape(max_items=10, download_images=False)
+    # Run a more comprehensive scrape (100 items to test the theory)
+    await scraper.run_full_scrape(max_items=100, download_images=False)
 
 
 if __name__ == "__main__":

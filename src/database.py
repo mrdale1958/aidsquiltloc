@@ -93,13 +93,25 @@ class DatabaseManager:
     def _calculate_content_hash(self, metadata: Dict[str, Any]) -> str:
         """Calculate a hash of the metadata for change detection"""
         # Create a stable representation of the metadata
+        # Convert lists to strings first to avoid sorting issues with mixed types
+        def safe_sort_list(lst):
+            """Safely sort a list that may contain mixed types"""
+            if not lst:
+                return []
+            try:
+                # Try to convert all items to strings for consistent sorting
+                return sorted([str(item) for item in lst])
+            except:
+                # If sorting fails, just return the list as strings
+                return [str(item) for item in lst]
+        
         stable_data = {
-            'title': metadata.get('title', ''),
-            'description': metadata.get('description', []),
-            'subject': sorted(metadata.get('subject', [])),
-            'contributor': sorted(metadata.get('contributor', [])),
-            'date': metadata.get('date', ''),
-            'image_urls': sorted(metadata.get('image_url', [])),
+            'title': str(metadata.get('title', '')),
+            'description': safe_sort_list(metadata.get('description', [])),
+            'subject': safe_sort_list(metadata.get('subject', [])),
+            'contributor': safe_sort_list(metadata.get('contributor', [])),
+            'date': str(metadata.get('date', '')),
+            'image_urls': safe_sort_list(metadata.get('image_url', [])),
         }
         
         # Convert to JSON and hash
@@ -291,6 +303,60 @@ class DatabaseManager:
             logger.error("Error getting records without images: %s", e)
             raise
     
+    async def item_exists(self, item_id: str) -> bool:
+        """Check if an item exists in the database"""
+        if not self.Session:
+            raise RuntimeError("Database not initialized")
+        
+        try:
+            with self.Session() as session:
+                record = session.query(QuiltRecord).filter(
+                    QuiltRecord.item_id == item_id
+                ).first()
+                return record is not None
+                
+        except Exception as e:
+            logger.error("Error checking if item exists %s: %s", item_id, e)
+            raise
+    
+    async def get_item_metadata(self, item_id: str) -> Optional[Dict[str, Any]]:
+        """Get metadata for a specific item"""
+        if not self.Session:
+            raise RuntimeError("Database not initialized")
+        
+        try:
+            with self.Session() as session:
+                record = session.query(QuiltRecord).filter(
+                    QuiltRecord.item_id == item_id
+                ).first()
+                
+                if not record:
+                    return None
+                
+                # Convert record to metadata dict
+                metadata = {
+                    'item_id': record.item_id,
+                    'loc_url': record.loc_url,
+                    'title': record.title,
+                    'description': json.loads(record.description or '[]'),
+                    'subject': json.loads(record.subject or '[]'),
+                    'contributor': json.loads(record.contributor or '[]'),
+                    'date': record.date_created,
+                    'location': json.loads(record.location or '[]'),
+                    'original_format': json.loads(record.format_info or '[]'),
+                    'quilt_block_number': record.quilt_block_number,
+                    'memorial_names': json.loads(record.memorial_names or '[]'),
+                    'image_urls': json.loads(record.image_urls or '[]'),
+                    'resource_urls': json.loads(record.resource_urls or '[]'),
+                    'local_images': json.loads(record.local_images or '[]'),
+                }
+                
+                return metadata
+                
+        except Exception as e:
+            logger.error("Error getting metadata for item %s: %s", item_id, e)
+            raise
+
     async def get_statistics(self) -> Dict[str, Any]:
         """Get database statistics"""
         if not self.Session:

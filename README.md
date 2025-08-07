@@ -110,10 +110,16 @@ cd ..
 
 ### Data Collection
 
-#### Basic Scraping
+#### Complete Collection Scraping
 ```bash
-# Scrape quilt records (stores in database)
+# Unlimited scrape - collect entire collection (5,000+ records)
+python main_unlimited.py
+
+# Enhanced scraper with limits
 python main_enhanced.py
+
+# Comprehensive scraper (100 records)
+python main_comprehensive.py
 
 # CLI interface with options
 python cli_enhanced.py scrape --limit 100 --download-images
