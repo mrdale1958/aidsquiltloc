@@ -64,8 +64,15 @@ class MetadataExtractor:
         if base_iiif_url:
             logger.info("Generating comprehensive image URLs for item %s", item_id)
             
-            # Dynamically discover available manuscript pages
-            available_manuscripts = await self._discover_manuscripts(base_iiif_url)
+            # Dynamically discover available manuscript pages with timeout
+            try:
+                available_manuscripts = await asyncio.wait_for(
+                    self._discover_manuscripts(base_iiif_url), 
+                    timeout=30.0  # Max 30 seconds for discovery
+                )
+            except asyncio.TimeoutError:
+                logger.warning("Manuscript discovery timed out for %s, using fallback", item_id)
+                available_manuscripts = [f"ms{i:04d}" for i in range(1, 57)]
             
             if available_manuscripts:
                 resolutions = ['pct:6.25', 'pct:12.5', 'pct:25', 'pct:50', 'pct:100']
@@ -131,35 +138,39 @@ class MetadataExtractor:
         import aiohttp
         
         available = []
+        timeout = aiohttp.ClientTimeout(total=10)  # Shorter timeout for faster discovery
         
-        async with aiohttp.ClientSession() as session:
-            # Check manuscript pages sequentially until we hit a 404
-            for ms_num in range(1, 100):  # Max reasonable check
-                ms_id = f"ms{ms_num:04d}"
-                test_url = f"{base_iiif_url}_{ms_id}/info.json"
-                
-                try:
-                    async with session.get(test_url) as response:
-                        if response.status == 200:
-                            available.append(ms_id)
-                        elif response.status == 404:
-                            # Stop on first 404 - no more manuscripts
-                            break
-                        else:
-                            # Other error, continue checking
-                            continue
-                except Exception as e:
-                    # Network error, continue checking
-                    logger.debug("Error checking manuscript %s: %s", ms_id, e)
-                    continue
+        async with aiohttp.ClientSession(timeout=timeout) as session:
+            # Check manuscript pages with limited range and faster timeouts
+            semaphore = asyncio.Semaphore(3)  # Limit concurrent checks
+            
+            async def check_manuscript(ms_num):
+                async with semaphore:
+                    ms_id = f"ms{ms_num:04d}"
+                    # Test actual image availability instead of just info.json
+                    test_url = f"{base_iiif_url}_{ms_id}/full/pct:6.25/0/default.jpg"
                     
-                # Small delay to be respectful
-                await asyncio.sleep(0.1)
+                    try:
+                        async with session.head(test_url) as response:
+                            if response.status == 200:
+                                return ms_id
+                            return None
+                    except Exception:
+                        return None
+            
+            # Check first 60 manuscripts concurrently (covers most blocks)
+            tasks = [check_manuscript(i) for i in range(1, 61)]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            
+            # Collect successful results
+            for result in results:
+                if isinstance(result, str):  # Valid manuscript ID
+                    available.append(result)
         
         if not available:
-            logger.warning("No manuscripts discovered, falling back to default range")
-            # Fallback to common range if discovery fails
-            available = [f"ms{i:04d}" for i in range(1, 57)]
+            logger.warning("No manuscripts discovered, falling back to minimal default: ms0001")
+            # Conservative fallback - just try ms0001 if discovery fails
+            available = ["ms0001"]
         
         logger.info("Discovered %d manuscripts: %s to %s", 
                    len(available), available[0] if available else "None", 
