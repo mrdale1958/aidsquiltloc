@@ -198,7 +198,7 @@ scraper.log
 temp/
 tmp/
 bfg.jar
-.bfg-report/
+..bfg-report/
 
 # API keys and secrets (if any)
 .env
