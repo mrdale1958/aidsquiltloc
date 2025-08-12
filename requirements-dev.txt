@@ -1,0 +1,24 @@
+# Development and testing dependencies for AIDS Memorial Quilt Records scraper
+
+# Core testing framework
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+pytest-mock>=3.11.0
+
+# HTTP mocking for API tests  
+aioresponses>=0.7.4
+
+# Code quality and linting
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
+pylint>=2.17.0
+
+# Type checking and validation
+types-aiofiles>=23.0.0
+types-Pillow>=10.0.0
+
+# Development utilities
+ipython>=8.0.0
+jupyter>=1.0.0

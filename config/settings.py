@@ -1,58 +1,91 @@
 """
-Configuration settings for the AIDS Memorial Quilt Records scraper
+Configuration settings for AIDS Memorial Quilt Records scraper
+Centralized configuration management with environment variable support
 """
 
 import os
 from pathlib import Path
 from dataclasses import dataclass
-from typing import Optional
 
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
+# Load environment variables if python-dotenv is available
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # dotenv not installed, continue without it
 
 
 @dataclass
-class Settings:
-    """Configuration settings for the scraper"""
+class ScraperConfig:
+    """
+    Main configuration class for the AIDS Memorial Quilt scraper
     
-    # API Settings
-    loc_api_base_url: str = "https://www.loc.gov"
-    aids_quilt_collection_url: str = "https://www.loc.gov/collections/aids-memorial-quilt-records/"
+    Attributes:
+        output_dir: Base directory for storing scraped data
+        database_path: Path to SQLite database file
+        rate_limit_delay: Delay between API requests in seconds
+        max_concurrent_downloads: Maximum concurrent image downloads
+        request_timeout: Timeout for HTTP requests in seconds
+        user_agent: User agent string for HTTP requests
+        max_retries: Maximum retry attempts for failed operations
+        chunk_size: File download chunk size in bytes
+    """
     
-    # Request settings
+    output_dir: Path = Path("output")
+    database_path: Path = Path("output/quilt_data.db")
+    rate_limit_delay: float = 1.0
+    max_concurrent_downloads: int = 5
     request_timeout: int = 30
-    max_concurrent_downloads: int = 1  # Keep at 1 to avoid rate limiting
-    rate_limit_delay: float = 30.0  # 30 seconds between requests - works with LOC
+    user_agent: str = "AIDS-Memorial-Quilt-Scraper/1.0 (Educational Research)"
+    max_retries: int = 3
+    chunk_size: int = 8192
     
-    # Image download settings (separate from API rate limits)
-    image_download_delay: float = 1.0  # Much faster for image downloads
-    max_concurrent_image_downloads: int = 5  # More concurrent downloads for images
-    
-    # File paths
-    base_dir: Path = Path(__file__).parent.parent
-    output_dir: Path = base_dir / "output"
-    images_dir: Path = output_dir / "images"
-    metadata_dir: Path = output_dir / "metadata"
-    database_path: Path = base_dir / "quilt_records.db"
-    
-    # Image settings
-    max_image_size_mb: int = 50
-    supported_image_formats: tuple = ('.jpg', '.jpeg', '.png', '.tiff', '.tif', '.jp2')
-    
-    # Metadata settings
-    metadata_format: str = "json"  # json or csv
-    
-    # Logging
-    log_level: str = os.getenv("LOG_LEVEL", "DEBUG")
-    log_file: str = "scraper.log"
-    
-    # Optional API key (if needed for higher rate limits)
-    api_key: Optional[str] = os.getenv("LOC_API_KEY")
-    
-    def __post_init__(self):
-        """Ensure directories exist"""
+    def __post_init__(self) -> None:
+        """Initialize configuration with environment variable overrides following project standards"""
+        # Override with environment variables if present
+        if env_output_dir := os.getenv("SCRAPER_OUTPUT_DIR"):
+            self.output_dir = Path(env_output_dir)
+        
+        if env_db_path := os.getenv("SCRAPER_DATABASE_PATH"):
+            self.database_path = Path(env_db_path)
+        
+        if env_rate_limit := os.getenv("SCRAPER_RATE_LIMIT_DELAY"):
+            try:
+                self.rate_limit_delay = float(env_rate_limit)
+            except ValueError:
+                pass  # Keep default value per error handling guidelines
+        
+        if env_max_downloads := os.getenv("SCRAPER_MAX_CONCURRENT_DOWNLOADS"):
+            try:
+                self.max_concurrent_downloads = int(env_max_downloads)
+            except ValueError:
+                pass  # Keep default value
+        
+        if env_timeout := os.getenv("SCRAPER_REQUEST_TIMEOUT"):
+            try:
+                self.request_timeout = int(env_timeout)
+            except ValueError:
+                pass  # Keep default value
+        
+        # Ensure required directories exist following safe file handling practices
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        self.images_dir.mkdir(parents=True, exist_ok=True)
-        self.metadata_dir.mkdir(parents=True, exist_ok=True)
+        self.database_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    @property
+    def images_dir(self) -> Path:
+        """Get the images output directory"""
+        return self.output_dir / "images"
+    
+    @property
+    def metadata_dir(self) -> Path:
+        """Get the metadata output directory"""
+        return self.output_dir / "metadata"
+    
+    @property
+    def logs_dir(self) -> Path:
+        """Get the logs output directory"""
+        return self.output_dir / "logs"
+
+
+# Export only what's defined in this module
+__all__ = ['ScraperConfig']

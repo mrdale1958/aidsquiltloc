@@ -1,0 +1,2360 @@
+{
+  "articles_and_essays": null,
+  "cite_this": {
+    "apa": "Names Project Foundation. (1988) <cite>AIDS Quilt BlockPanel Maker Records</cite>. [Manuscript/Mixed Material] Retrieved from the Library of Congress, https://www.loc.gov/item/afc2019048_0501/.",
+    "chicago": "Names Project Foundation. <cite>AIDS Quilt BlockPanel Maker Records</cite>. 1988. Manuscript/Mixed Material. https://www.loc.gov/item/afc2019048_0501/.",
+    "mla": "Names Project Foundation. <cite>AIDS Quilt BlockPanel Maker Records</cite>. 1988. Manuscript/Mixed Material. Retrieved from the Library of Congress, &lt;www.loc.gov/item/afc2019048_0501/&gt;."
+  },
+  "item": {
+    "_version_": 1827779723352080384,
+    "access_restricted": false,
+    "aka": [
+      "http://www.loc.gov/item/afc2019048_0501/",
+      "https://hdl.loc.gov/loc.afc/afc2019048_0501",
+      "http://www.loc.gov/resource/afc2019048.afc2019048_0501/",
+      "http://www.loc.gov/item/afc2019048.afc2019048_0501/"
+    ],
+    "call_number": [
+      "Call number: AFC 2019/048: Box 496",
+      "Call number: AFC 2019/048: Box 030"
+    ],
+    "campaigns": [],
+    "contributor_names": [
+      "NAMES Project Foundation (Collector)"
+    ],
+    "contributors": [
+      {
+        "names project foundation": "https://www.loc.gov/search/?fa=contributor:names+project+foundation&fo=json"
+      }
+    ],
+    "created_published": [
+      "1988"
+    ],
+    "date": "1988",
+    "dates": [
+      {
+        "1988": "https://www.loc.gov/search/?dates=1988/1988&fo=json"
+      }
+    ],
+    "description": [
+      ""
+    ],
+    "digital_id": [
+      "https://hdl.loc.gov/loc.afc/afc2019048_0501"
+    ],
+    "digitized": true,
+    "display_offsite": true,
+    "extract_timestamp": "2025-03-27T16:59:33.673Z",
+    "extract_urls": [
+      "https://dmtool.loc.gov/data-management-tool/export_group_xml/afc2019048/afc2019048_0501.xml#afc2019048"
+    ],
+    "format": [
+      {
+        "manuscript/mixed material": "https://www.loc.gov/search/?fa=original_format:manuscript/mixed+material&fo=json"
+      }
+    ],
+    "genre": [
+      "Manuscripts",
+      "Personal correspondence"
+    ],
+    "group": [
+      "afc2019048",
+      "aids-memorial-quilt-records"
+    ],
+    "hassegments": true,
+    "id": "http://www.loc.gov/item/afc2019048_0501/",
+    "image_url": [
+      "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/full/pct:6.25/0/default.jpg#h=306&w=186",
+      "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/full/pct:12.5/0/default.jpg#h=612&w=372",
+      "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/full/pct:25/0/default.jpg#h=1224&w=745",
+      "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/full/pct:50/0/default.jpg#h=2449&w=1490",
+      "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/full/pct:100/0/default.jpg#h=4899&w=2980"
+    ],
+    "index": 1,
+    "item": {
+      "call_number": [
+        "Call number: AFC 2019/048: Box 496",
+        "Call number: AFC 2019/048: Box 030"
+      ],
+      "contributors": [
+        "NAMES Project Foundation (Collector)"
+      ],
+      "created_published": [
+        "1988"
+      ],
+      "date": "1988",
+      "digital_id": [
+        "https://hdl.loc.gov/loc.afc/afc2019048_0501"
+      ],
+      "format": "Manuscript/Mixed Material",
+      "genre": [
+        "Manuscripts",
+        "Personal correspondence"
+      ],
+      "language": [
+        "eng"
+      ],
+      "location": [
+        "United States of America"
+      ],
+      "medium": [
+        "Manuscripts"
+      ],
+      "notes": [
+        "AIDS Quilt Block Names: Billy Emert, Raydon Cudney, Joe Philpot, John Wallace, Larry Howell, James Cecil \"Jimmy\" Dixon, Wally Smith, Rick Hollingsworth"
+      ],
+      "repository": "American Folklife Center",
+      "rights": "Restrictions apply. Refer to Rights and Access page.",
+      "source_collection": "AIDS Memorial Quilt Records (AFC 2019/048)",
+      "subjects": [
+        "NAMES Project AIDS Memorial Quilt",
+        "Memorials",
+        "Quiltmakers",
+        "AIDS (Disease) and art",
+        "Manuscripts",
+        "Personal correspondence",
+        "United States of America"
+      ],
+      "title": "AIDS Quilt Block 0501 Panel Maker Records"
+    },
+    "language": [
+      "english"
+    ],
+    "languages": [
+      {
+        "english": "https://www.loc.gov/search/?fa=language:english&fo=json"
+      }
+    ],
+    "location": [
+      "united states"
+    ],
+    "locations": [
+      {
+        "united states": "https://www.loc.gov/search/?fa=location:united+states&fo=json"
+      }
+    ],
+    "medium": [
+      "Manuscripts"
+    ],
+    "mime_type": [
+      "application/pdf",
+      "application/xml",
+      "text/plain",
+      "image/jpeg",
+      "image/jp2"
+    ],
+    "notes": [
+      "AIDS Quilt Block Names: Billy Emert, Raydon Cudney, Joe Philpot, John Wallace, Larry Howell, James Cecil \"Jimmy\" Dixon, Wally Smith, Rick Hollingsworth"
+    ],
+    "online_format": [
+      "pdf",
+      "online text",
+      "image"
+    ],
+    "original_format": [
+      "manuscript/mixed material"
+    ],
+    "other_formats": [],
+    "partof": [
+      {
+        "count": 5164,
+        "title": "aids memorial quilt records",
+        "url": "https://www.loc.gov/collections/aids-memorial-quilt-records/?fo=json"
+      },
+      {
+        "count": 174121,
+        "title": "american folklife center",
+        "url": "https://www.loc.gov/search/?fa=partof:american+folklife+center&fo=json"
+      }
+    ],
+    "repository": [
+      "American Folklife Center"
+    ],
+    "resources": [
+      {
+        "files": 16,
+        "image": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/full/pct:6.25/0/default.jpg",
+        "pdf": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501.pdf",
+        "representative_index": 3,
+        "url": "https://www.loc.gov/resource/afc2019048.afc2019048_0501/",
+        "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service"
+      }
+    ],
+    "rights": [
+      "<p>The AIDS Memorial Quilt digital collection presents digitized records concerning Quilt panels that are more than 25 years old. Records concerning panels less than 25 years old are available onsite in the Folklife Reading Room. For more information see About This Collection.</p>\n<p>The Library of Congress is providing access to these materials strictly for educational and research purposes. The written permission of the National AIDS Memorial (the copyright owner of the AIDS Memorial Quilt records) and/or other holders of rights (such as publicity and/or privacy rights) is required for distribution, reproduction, or other use of protected items beyond that allowed by fair use or other statutory exemptions. Responsibility for making an independent legal assessment of an item and securing any necessary permissions ultimately rests with persons desiring to use the item. See our <a href=\"/legal/\">Legal Notices</a> and <a href=\"/legal#privacy_publicity\">Privacy and Publicity Rights</a> for additional information and restrictions.</p>\n<p>The National AIDS Memorial and the Library of Congress ask that researchers treat the records within the Archive with respect for the persons whose lives the records document.</p>\n<p>Researchers or others who would like to make further use of these collection materials or have other reference questions should contact the <a href=\"https://hdl.loc.gov/loc.afc/folklife.contact\" target=\"_blank\">Folklife Reading Room</a> for assistance.</p>\n<p>More about <a href=\"/legal/\">Copyright and other Restrictions</a>.</p>\n<p>For guidance about compiling full citations consult <a href=\"/programs/teachers/getting-started-with-primary-sources/citing/\">Citing Primary Sources</a>.</p>\n<p><strong>Credit line</strong><br>\nAIDS Memorial Quilt Records (AFC 2019/048), American Folklife Center, Library of Congress, Washington, D.C</p>\n"
+    ],
+    "score": 16.796846,
+    "shard": "01",
+    "shelf_id": "Call number: AFC 2019/048: Box 496 Call number: AFC 2019/048: Box 030",
+    "site": [],
+    "source_collection": "AIDS Memorial Quilt Records (AFC 2019/048)",
+    "source_modified": "2000-01-01T12:00:00Z",
+    "subject": [
+      "names project aids memorial quilt",
+      "personal correspondence",
+      "manuscripts",
+      "aids (disease) and art",
+      "memorials",
+      "quiltmakers"
+    ],
+    "subject_headings": [
+      "NAMES Project AIDS Memorial Quilt",
+      "Memorials",
+      "Quiltmakers",
+      "AIDS (Disease) and art",
+      "Manuscripts",
+      "Personal correspondence",
+      "United States of America"
+    ],
+    "subjects": [
+      {
+        "aids (disease) and art": "https://www.loc.gov/search/?fa=subject:aids+%28disease%29+and+art&fo=json"
+      },
+      {
+        "manuscripts": "https://www.loc.gov/search/?fa=subject:manuscripts&fo=json"
+      },
+      {
+        "memorials": "https://www.loc.gov/search/?fa=subject:memorials&fo=json"
+      },
+      {
+        "names project aids memorial quilt": "https://www.loc.gov/search/?fa=subject:names+project+aids+memorial+quilt&fo=json"
+      },
+      {
+        "personal correspondence": "https://www.loc.gov/search/?fa=subject:personal+correspondence&fo=json"
+      },
+      {
+        "quiltmakers": "https://www.loc.gov/search/?fa=subject:quiltmakers&fo=json"
+      }
+    ],
+    "timestamp": "2025-03-27T20:16:18.037Z",
+    "title": "AIDS Quilt Block 0501 Panel Maker Records",
+    "type": [
+      "manuscript/mixed material"
+    ],
+    "url": "https://www.loc.gov/item/afc2019048_0501/"
+  },
+  "more_like_this": [
+    {
+      "access_restricted": false,
+      "aka": [
+        "http://lccn.loc.gov/2019655313",
+        "http://www.loc.gov/item/2019655313/",
+        "https://hdl.loc.gov/loc.afc/collafc.afc2019048"
+      ],
+      "campaigns": [],
+      "contributor": [
+        "names project foundation",
+        "jones, cleve",
+        "rhoad, julie"
+      ],
+      "date": "1986",
+      "dates": [
+        "1986"
+      ],
+      "description": [
+        "Documentation of the work of The NAMES Project, the largest HIV/AIDS-related grassroots volunteer organization in the country and administrator of the AIDS Memorial Quilt, the largest folk art project in United States history. The collection includes correspondence, administrative records, printed material, photographs, and audiovisual material that document the creation, marketing, and exhibition of the AIDS Memorial Quilt.  Also included are records related directly to persons listed on the quilts, including correspondence, photographs, tributes, epitaphs, news clippings, and artifacts submitted by panel-makers to add context about the lives of the persons in the quilt. Digital assets of particular note are digital images of all circa 6,000 quilt blocks and structured data containing detailed information about quilt creators, persons listed on quilts, and quilt attributes. The Quilt was nominated for a Nobel Peace Prize in 1989 and has been the subject of countless books, films, scholarly papers, articles, and theatrical, artistic and musical performances."
+      ],
+      "digitized": true,
+      "extract_timestamp": "2025-03-13T05:56:07.018Z",
+      "group": [
+        "catalog-split-03",
+        "catalog",
+        "main-catalog-split-03"
+      ],
+      "hassegments": false,
+      "id": "http://lccn.loc.gov/2019655313",
+      "image_url": [],
+      "index": 1,
+      "language": [
+        "english"
+      ],
+      "location": [
+        "united states"
+      ],
+      "number": [
+        "2025-03-11t08:04:28",
+        "2019655313"
+      ],
+      "original_format": [
+        "manuscript/mixed material",
+        "collection"
+      ],
+      "partof": [
+        "american folklife center",
+        "catalog"
+      ],
+      "score": 44.116802,
+      "shelf_id": "http://lccn.loc.gov/2019655313",
+      "site": [
+        "catalog"
+      ],
+      "subject": [
+        "names project aids memorial quilt",
+        "correspondence",
+        "names project foundation",
+        "patients",
+        "aids (disease) and art",
+        "digital photographs",
+        "photographs",
+        "memorials",
+        "mortality",
+        "color",
+        "registers",
+        "aids (disease)",
+        "quiltmakers",
+        "united states"
+      ],
+      "timestamp": "2025-03-13T05:57:31.930Z",
+      "title": "AIDS Memorial Quilt records",
+      "type": [
+        "manuscript"
+      ],
+      "url": "//lccn.loc.gov/2019655313"
+    },
+    {
+      "access_restricted": false,
+      "aka": [
+        "http://www.loc.gov/item/afc2019048_2621/",
+        "https://hdl.loc.gov/loc.afc/afc2019048_2621",
+        "http://www.loc.gov/resource/afc2019048.afc2019048_2621/",
+        "http://www.loc.gov/item/afc2019048.afc2019048_2621/"
+      ],
+      "campaigns": [],
+      "contributor": [
+        "names project foundation"
+      ],
+      "date": "1993",
+      "dates": [
+        "1993"
+      ],
+      "description": [
+        ""
+      ],
+      "digitized": true,
+      "extract_timestamp": "2025-03-27T17:00:05.814Z",
+      "group": [
+        "afc2019048",
+        "aids-memorial-quilt-records"
+      ],
+      "hassegments": true,
+      "id": "http://www.loc.gov/item/afc2019048_2621/",
+      "image_url": [
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:1:afc2019048_2621:afc2019048_2621_ms0004/full/pct:6.25/0/default.jpg#h=304&w=234",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:1:afc2019048_2621:afc2019048_2621_ms0004/full/pct:12.5/0/default.jpg#h=609&w=469",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:1:afc2019048_2621:afc2019048_2621_ms0004/full/pct:25/0/default.jpg#h=1218&w=938",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:1:afc2019048_2621:afc2019048_2621_ms0004/full/pct:50/0/default.jpg#h=2437&w=1876",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:1:afc2019048_2621:afc2019048_2621_ms0004/full/pct:100/0/default.jpg#h=4874&w=3753"
+      ],
+      "index": 2,
+      "language": [
+        "english"
+      ],
+      "location": [
+        "united states"
+      ],
+      "mime_type": [
+        "application/pdf",
+        "application/xml",
+        "text/plain",
+        "image/jpeg",
+        "image/jp2"
+      ],
+      "online_format": [
+        "pdf",
+        "online text",
+        "image"
+      ],
+      "original_format": [
+        "manuscript/mixed material"
+      ],
+      "partof": [
+        "american folklife center",
+        "aids memorial quilt records"
+      ],
+      "score": 26.453695,
+      "shelf_id": "Call number: AFC 2019/048: Box 193",
+      "subject": [
+        "names project aids memorial quilt",
+        "personal correspondence",
+        "manuscripts",
+        "aids (disease) and art",
+        "memorials",
+        "quiltmakers"
+      ],
+      "timestamp": "2025-03-27T22:36:40.634Z",
+      "title": "AIDS Quilt Block 2621 Panel Maker Records",
+      "type": [
+        "Manuscript/Mixed Material"
+      ],
+      "url": "https://www.loc.gov/item/afc2019048_2621/"
+    },
+    {
+      "access_restricted": false,
+      "aka": [
+        "http://www.loc.gov/item/afc2019048_2622/",
+        "https://hdl.loc.gov/loc.afc/afc2019048_2622",
+        "http://www.loc.gov/resource/afc2019048.afc2019048_2622/",
+        "http://www.loc.gov/item/afc2019048.afc2019048_2622/"
+      ],
+      "campaigns": [],
+      "contributor": [
+        "names project foundation"
+      ],
+      "date": "1993",
+      "dates": [
+        "1993"
+      ],
+      "description": [
+        ""
+      ],
+      "digitized": true,
+      "extract_timestamp": "2025-03-27T17:00:05.814Z",
+      "group": [
+        "afc2019048",
+        "aids-memorial-quilt-records"
+      ],
+      "hassegments": true,
+      "id": "http://www.loc.gov/item/afc2019048_2622/",
+      "image_url": [
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:2:afc2019048_2622:afc2019048_2622_ms0004/full/pct:12.5/0/default.jpg#h=247&w=315",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:2:afc2019048_2622:afc2019048_2622_ms0004/full/pct:25/0/default.jpg#h=495&w=630",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:2:afc2019048_2622:afc2019048_2622_ms0004/full/pct:50/0/default.jpg#h=990&w=1260",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:2:afc2019048_2622:afc2019048_2622_ms0004/full/pct:100/0/default.jpg#h=1980&w=2520"
+      ],
+      "index": 3,
+      "language": [
+        "english"
+      ],
+      "location": [
+        "united states"
+      ],
+      "mime_type": [
+        "application/pdf",
+        "application/xml",
+        "text/plain",
+        "image/jpeg",
+        "image/jp2"
+      ],
+      "online_format": [
+        "pdf",
+        "online text",
+        "image"
+      ],
+      "original_format": [
+        "manuscript/mixed material"
+      ],
+      "partof": [
+        "american folklife center",
+        "aids memorial quilt records"
+      ],
+      "score": 26.453695,
+      "shelf_id": "Call number: AFC 2019/048: Box 193",
+      "subject": [
+        "names project aids memorial quilt",
+        "personal correspondence",
+        "manuscripts",
+        "aids (disease) and art",
+        "memorials",
+        "quiltmakers"
+      ],
+      "timestamp": "2025-03-27T22:36:40.634Z",
+      "title": "AIDS Quilt Block 2622 Panel Maker Records",
+      "type": [
+        "Manuscript/Mixed Material"
+      ],
+      "url": "https://www.loc.gov/item/afc2019048_2622/"
+    },
+    {
+      "access_restricted": false,
+      "aka": [
+        "http://www.loc.gov/item/afc2019048_2623/",
+        "https://hdl.loc.gov/loc.afc/afc2019048_2623",
+        "http://www.loc.gov/resource/afc2019048.afc2019048_2623/",
+        "http://www.loc.gov/item/afc2019048.afc2019048_2623/"
+      ],
+      "campaigns": [],
+      "contributor": [
+        "names project foundation"
+      ],
+      "date": "1993",
+      "dates": [
+        "1993"
+      ],
+      "description": [
+        ""
+      ],
+      "digitized": true,
+      "extract_timestamp": "2025-03-27T17:00:05.814Z",
+      "group": [
+        "afc2019048",
+        "aids-memorial-quilt-records"
+      ],
+      "hassegments": true,
+      "id": "http://www.loc.gov/item/afc2019048_2623/",
+      "image_url": [
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:3:afc2019048_2623:afc2019048_2623_ms0004/full/pct:6.25/0/default.jpg#h=290&w=228",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:3:afc2019048_2623:afc2019048_2623_ms0004/full/pct:12.5/0/default.jpg#h=580&w=457",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:3:afc2019048_2623:afc2019048_2623_ms0004/full/pct:25/0/default.jpg#h=1161&w=914",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:3:afc2019048_2623:afc2019048_2623_ms0004/full/pct:50/0/default.jpg#h=2323&w=1829",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:3:afc2019048_2623:afc2019048_2623_ms0004/full/pct:100/0/default.jpg#h=4646&w=3658"
+      ],
+      "index": 4,
+      "language": [
+        "english"
+      ],
+      "location": [
+        "united states"
+      ],
+      "mime_type": [
+        "application/pdf",
+        "application/xml",
+        "text/plain",
+        "image/jpeg",
+        "image/jp2"
+      ],
+      "online_format": [
+        "pdf",
+        "online text",
+        "image"
+      ],
+      "original_format": [
+        "manuscript/mixed material"
+      ],
+      "partof": [
+        "american folklife center",
+        "aids memorial quilt records"
+      ],
+      "score": 26.453695,
+      "shelf_id": "Call number: AFC 2019/048: Box 193",
+      "subject": [
+        "names project aids memorial quilt",
+        "personal correspondence",
+        "manuscripts",
+        "aids (disease) and art",
+        "memorials",
+        "quiltmakers"
+      ],
+      "timestamp": "2025-03-27T22:36:40.634Z",
+      "title": "AIDS Quilt Block 2623 Panel Maker Records",
+      "type": [
+        "Manuscript/Mixed Material"
+      ],
+      "url": "https://www.loc.gov/item/afc2019048_2623/"
+    },
+    {
+      "access_restricted": false,
+      "aka": [
+        "http://www.loc.gov/item/afc2019048_2624/",
+        "https://hdl.loc.gov/loc.afc/afc2019048_2624",
+        "http://www.loc.gov/resource/afc2019048.afc2019048_2624/",
+        "http://www.loc.gov/item/afc2019048.afc2019048_2624/"
+      ],
+      "campaigns": [],
+      "contributor": [
+        "names project foundation"
+      ],
+      "date": "1993",
+      "dates": [
+        "1993"
+      ],
+      "description": [
+        ""
+      ],
+      "digitized": true,
+      "extract_timestamp": "2025-03-27T17:00:05.814Z",
+      "group": [
+        "afc2019048",
+        "aids-memorial-quilt-records"
+      ],
+      "hassegments": true,
+      "id": "http://www.loc.gov/item/afc2019048_2624/",
+      "image_url": [
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:4:afc2019048_2624:afc2019048_2624_ms0004/full/pct:25/0/default.jpg#h=212&w=401",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:4:afc2019048_2624:afc2019048_2624_ms0004/full/pct:50/0/default.jpg#h=425&w=802",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:4:afc2019048_2624:afc2019048_2624_ms0004/full/pct:100/0/default.jpg#h=850&w=1604"
+      ],
+      "index": 5,
+      "language": [
+        "english"
+      ],
+      "location": [
+        "united states"
+      ],
+      "mime_type": [
+        "application/pdf",
+        "application/xml",
+        "text/plain",
+        "image/jpeg",
+        "image/jp2"
+      ],
+      "online_format": [
+        "pdf",
+        "online text",
+        "image"
+      ],
+      "original_format": [
+        "manuscript/mixed material"
+      ],
+      "partof": [
+        "american folklife center",
+        "aids memorial quilt records"
+      ],
+      "score": 26.453695,
+      "shelf_id": "Call number: AFC 2019/048: Box 193 Call number: AFC 2019/048: Box 414 Folder 7",
+      "subject": [
+        "names project aids memorial quilt",
+        "personal correspondence",
+        "manuscripts",
+        "aids (disease) and art",
+        "memorials",
+        "quiltmakers"
+      ],
+      "timestamp": "2025-03-27T22:36:40.634Z",
+      "title": "AIDS Quilt Block 2624 Panel Maker Records",
+      "type": [
+        "Manuscript/Mixed Material"
+      ],
+      "url": "https://www.loc.gov/item/afc2019048_2624/"
+    },
+    {
+      "access_restricted": false,
+      "aka": [
+        "http://www.loc.gov/item/afc2019048_2625/",
+        "https://hdl.loc.gov/loc.afc/afc2019048_2625",
+        "http://www.loc.gov/resource/afc2019048.afc2019048_2625/",
+        "http://www.loc.gov/item/afc2019048.afc2019048_2625/"
+      ],
+      "campaigns": [],
+      "contributor": [
+        "names project foundation"
+      ],
+      "date": "1993",
+      "dates": [
+        "1993"
+      ],
+      "description": [
+        ""
+      ],
+      "digitized": true,
+      "extract_timestamp": "2025-03-27T17:00:05.814Z",
+      "group": [
+        "afc2019048",
+        "aids-memorial-quilt-records"
+      ],
+      "hassegments": true,
+      "id": "http://www.loc.gov/item/afc2019048_2625/",
+      "image_url": [
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:5:afc2019048_2625:afc2019048_2625_ms0004/full/pct:12.5/0/default.jpg#h=271&w=200",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:5:afc2019048_2625:afc2019048_2625_ms0004/full/pct:25/0/default.jpg#h=543&w=401",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:5:afc2019048_2625:afc2019048_2625_ms0004/full/pct:50/0/default.jpg#h=1087&w=803",
+        "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_2:62:5:afc2019048_2625:afc2019048_2625_ms0004/full/pct:100/0/default.jpg#h=2174&w=1607"
+      ],
+      "index": 6,
+      "language": [
+        "english"
+      ],
+      "location": [
+        "united states"
+      ],
+      "mime_type": [
+        "application/pdf",
+        "application/xml",
+        "text/plain",
+        "image/jpeg",
+        "image/jp2"
+      ],
+      "online_format": [
+        "pdf",
+        "online text",
+        "image"
+      ],
+      "original_format": [
+        "manuscript/mixed material"
+      ],
+      "partof": [
+        "american folklife center",
+        "aids memorial quilt records"
+      ],
+      "score": 26.453695,
+      "shelf_id": "Call number: AFC 2019/048: Box 193",
+      "subject": [
+        "names project aids memorial quilt",
+        "personal correspondence",
+        "manuscripts",
+        "aids (disease) and art",
+        "memorials",
+        "quiltmakers"
+      ],
+      "timestamp": "2025-03-27T22:36:40.634Z",
+      "title": "AIDS Quilt Block 2625 Panel Maker Records",
+      "type": [
+        "Manuscript/Mixed Material"
+      ],
+      "url": "https://www.loc.gov/item/afc2019048_2625/"
+    }
+  ],
+  "options": {
+    "access_group": [
+      ""
+    ],
+    "access_group_raw": "",
+    "all": null,
+    "api_version": "1",
+    "app_context": null,
+    "application_version": "$Revision$",
+    "attribute": null,
+    "attribute!": null,
+    "attribute_map": null,
+    "cache_tags": [
+      "afc2019048",
+      "aids-memorial-quilt-records",
+      "catalog-split-03",
+      "catalog",
+      "main-catalog-split-03",
+      "paprika-music",
+      "ihas/mets",
+      "performingarts",
+      "catalog-split-10",
+      "main-catalog-split-10",
+      "main-catalog",
+      "paprika-iabooks",
+      "catalog-split-09",
+      "main-catalog-split-09",
+      "catalog-split-05",
+      "main-catalog-split-05",
+      "collections-portal"
+    ],
+    "callback": null,
+    "clip": null,
+    "clip_image_width": null,
+    "clip_rotation": null,
+    "content_filter": null,
+    "content_replacement": "",
+    "count": null,
+    "dates": null,
+    "default_count": 25,
+    "delimiter": null,
+    "digital_id": null,
+    "display_level": null,
+    "distance": null,
+    "downloadOption": null,
+    "duration": 0.7184674739837646,
+    "embed": [],
+    "embed!": [],
+    "error_response_status": null,
+    "excludeTerms": null,
+    "facetLimits": "",
+    "facetPrefix": null,
+    "facet_count": null,
+    "facet_style": null,
+    "field": null,
+    "format": "json",
+    "host": "www.loc.gov",
+    "ical": false,
+    "id": "afc2019048_0501/",
+    "iiif": false,
+    "index": null,
+    "inputEncoding": "UTF-8",
+    "is_portal": null,
+    "item": null,
+    "items": null,
+    "keys": null,
+    "language": null,
+    "latlong": null,
+    "method": "GET",
+    "newSearch": null,
+    "new_clip_url": false,
+    "onsite": false,
+    "operator": null,
+    "outputEncoding": "UTF-8",
+    "page_campaigns": [],
+    "path_info": "/item/afc2019048_0501/",
+    "port": "443",
+    "proxypath": null,
+    "query_string": "fo=json",
+    "redirect_proxy": false,
+    "redirect_to_item": null,
+    "referer": "",
+    "region": "",
+    "release_id": 123456789,
+    "request_host": "www.loc.gov",
+    "request_params": {
+      "fo": [
+        "json"
+      ]
+    },
+    "request_url": "https://www.loc.gov/item/afc2019048_0501/?fo=json",
+    "resource": "",
+    "resource_sequence": null,
+    "scheme": "https",
+    "searchIn": null,
+    "searchTerms": "",
+    "segments": null,
+    "shards": [
+      "01"
+    ],
+    "site_defaults": [],
+    "site_id": null,
+    "site_type": null,
+    "solrQuery": "",
+    "sortBy": null,
+    "sortOrder": null,
+    "startPage": null,
+    "style": null,
+    "suggested": null,
+    "target": null,
+    "template": "layouts/item/layout",
+    "timestamp": 1754877351.825187,
+    "tz_aware": null,
+    "unionFacets": "",
+    "webcast_permalink": null
+  },
+  "related_items": [
+    {
+      "access_restricted": false,
+      "aka": [
+        "http://www.loc.gov/resource/music.musihas-200181952-012/",
+        "http://www.loc.gov/resource/music.musihas-200181952-021/",
+        "http://www.loc.gov/resource/music.musihas-200181952-015/",
+        "http://www.loc.gov/resource/music.musihas-200181952-033/",
+        "http://www.loc.gov/resource/music.musihas-200181952-005/",
+        "http://www.loc.gov/resource/music.musihas-200181952-039/",
+        "http://www.loc.gov/resource/music.musihas-200181952-045/",
+        "http://www.loc.gov/resource/music.musihas-200181952-007/",
+        "http://www.loc.gov/resource/music.musihas-200181952-031/",
+        "http://www.loc.gov/resource/music.musihas-200181952-011/",
+        "http://www.loc.gov/resource/music.musihas-200181952-027/",
+        "http://www.loc.gov/resource/music.musihas-200181952-013/",
+        "http://www.loc.gov/resource/music.musihas-200181952-023/",
+        "http://www.loc.gov/resource/music.musihas-200181952-017/",
+        "http://www.loc.gov/resource/music.musihas-200181952-003/",
+        "http://www.loc.gov/resource/music.musihas-200181952-006/",
+        "https://hdl.loc.gov/loc.music/ihas.200181952",
+        "http://www.loc.gov/resource/music.musihas-200181952-004/",
+        "http://www.loc.gov/item/ihas.200181952/",
+        "http://www.loc.gov/resource/music.musihas-200181952-041/",
+        "http://www.loc.gov/resource/music.musihas-200181952-018/",
+        "http://www.loc.gov/resource/music.musihas-200181952-008/",
+        "http://www.loc.gov/resource/music.musihas-200181952-035/",
+        "http://www.loc.gov/resource/music.musihas-200181952-025/",
+        "http://www.loc.gov/resource/music.musihas-200181952-047/",
+        "http://www.loc.gov/resource/music.musihas-200181952-019/",
+        "http://www.loc.gov/resource/music.musihas-200181952-029/",
+        "http://www.loc.gov/resource/music.musihas-200181952-037/",
+        "http://www.loc.gov/resource/music.musihas-200181952-022/",
+        "http://www.loc.gov/resource/music.musihas-200181952-014/",
+        "http://www.loc.gov/resource/music.musihas-200181952-020/",
+        "http://www.loc.gov/resource/music.musihas-200181952-046/",
+        "http://www.loc.gov/resource/music.musihas-200181952-030/",
+        "http://www.loc.gov/resource/music.musihas-200181952-044/",
+        "http://www.loc.gov/resource/music.musihas-200181952-002/",
+        "http://www.loc.gov/resource/music.musihas-200181952-038/",
+        "http://www.loc.gov/resource/music.musihas-200181952-026/",
+        "http://www.loc.gov/resource/music.musihas-200181952-016/",
+        "http://www.loc.gov/resource/music.musihas-200181952-048/",
+        "http://www.loc.gov/resource/music.musihas-200181952-043/",
+        "http://www.loc.gov/resource/music.musihas-200181952-010/",
+        "http://www.loc.gov/resource/music.musihas-200181952-024/",
+        "http://www.loc.gov/resource/music.musihas-200181952-009/",
+        "http://www.loc.gov/resource/music.musihas-200181952-042/",
+        "http://www.loc.gov/resource/music.musihas-200181952-034/",
+        "http://www.loc.gov/resource/music.musihas-200181952-040/",
+        "http://www.loc.gov/resource/music.musihas-200181952-032/",
+        "http://www.loc.gov/resource/music.musihas-200181952-001/",
+        "http://www.loc.gov/resource/music.musihas-200181952-036/",
+        "http://www.loc.gov/resource/music.musihas-200181952-028/",
+        "http://lcweb2.loc.gov/diglib/ihas/loc.natlib.ihas.200181952/",
+        "http://lcweb2.loc.gov/diglib/ihas/loc.natlib.ihas.200181952/default.html",
+        "http://www.loc.gov/resource/ihas.200181952.0/",
+        "http://www.loc.gov/resource/ihas.200181952.1/",
+        "http://www.loc.gov/resource/ihas.200181952.2/",
+        "http://www.loc.gov/resource/ihas.200181952.3/",
+        "http://www.loc.gov/resource/ihas.200181952.4/",
+        "http://www.loc.gov/resource/ihas.200181952.5/",
+        "http://www.loc.gov/resource/ihas.200181952.6/",
+        "http://www.loc.gov/resource/ihas.200181952.7/",
+        "http://www.loc.gov/resource/ihas.200181952.8/",
+        "http://www.loc.gov/resource/ihas.200181952.9/",
+        "http://www.loc.gov/resource/ihas.200181952.10/",
+        "http://www.loc.gov/resource/ihas.200181952.11/",
+        "http://www.loc.gov/resource/ihas.200181952.12/",
+        "http://www.loc.gov/resource/ihas.200181952.13/",
+        "http://www.loc.gov/resource/ihas.200181952.14/",
+        "http://www.loc.gov/resource/ihas.200181952.15/",
+        "http://www.loc.gov/resource/ihas.200181952.16/",
+        "http://www.loc.gov/resource/ihas.200181952.17/",
+        "http://www.loc.gov/resource/ihas.200181952.18/",
+        "http://www.loc.gov/resource/ihas.200181952.19/",
+        "http://www.loc.gov/resource/ihas.200181952.20/",
+        "http://www.loc.gov/resource/ihas.200181952.21/",
+        "http://www.loc.gov/resource/ihas.200181952.22/",
+        "http://www.loc.gov/resource/ihas.200181952.23/",
+        "http://www.loc.gov/resource/ihas.200181952.24/",
+        "http://www.loc.gov/resource/ihas.200181952.25/",
+        "http://www.loc.gov/resource/ihas.200181952.26/",
+        "http://www.loc.gov/resource/ihas.200181952.27/",
+        "http://www.loc.gov/resource/ihas.200181952.28/",
+        "http://www.loc.gov/resource/ihas.200181952.29/",
+        "http://www.loc.gov/resource/ihas.200181952.30/",
+        "http://www.loc.gov/resource/ihas.200181952.31/",
+        "http://www.loc.gov/resource/ihas.200181952.32/",
+        "http://www.loc.gov/resource/ihas.200181952.33/",
+        "http://www.loc.gov/resource/ihas.200181952.34/",
+        "http://www.loc.gov/resource/ihas.200181952.35/",
+        "http://www.loc.gov/resource/ihas.200181952.36/",
+        "http://www.loc.gov/resource/ihas.200181952.37/",
+        "http://www.loc.gov/resource/ihas.200181952.38/",
+        "http://www.loc.gov/resource/ihas.200181952.39/",
+        "http://www.loc.gov/resource/ihas.200181952.40/",
+        "http://www.loc.gov/resource/ihas.200181952.41/",
+        "http://www.loc.gov/resource/ihas.200181952.42/",
+        "http://www.loc.gov/resource/ihas.200181952.43/",
+        "http://www.loc.gov/resource/ihas.200181952.44/",
+        "http://www.loc.gov/resource/ihas.200181952.45/",
+        "http://www.loc.gov/resource/ihas.200181952.46/",
+        "http://www.loc.gov/resource/ihas.200181952.47/",
+        "http://www.loc.gov/item/ihas.200181952"
+      ],
+      "campaigns": [],
+      "contributor": [
+        "gillespie, john",
+        "attallah, sadiq",
+        "attalah, sadiq",
+        "institute of coptic studies choir",
+        "moftah, ragheb",
+        "girgis, father marcus of matai",
+        "gillespie, john e.",
+        "as-suryani, father shenouda [his holiness pope shenouda iii]",
+        "father gregoriuos",
+        "shenouda iii, coptic patriarch of alexandria",
+        "aziz, father ibrahim"
+      ],
+      "date": "1967",
+      "dates": [
+        "1967"
+      ],
+      "description": [
+        "John E. Gillespie collection of Coptic mass recordings - Coptic liturgy of St. Basil as recorded by the Coptic Institute of Studies in 1967 under the direction of Ragheb Moftah  sound recording |   8 sound tape reels: analog, 15 ips, mono.; 10-inch |   Congregation Responses: The Institute of Coptic Studies Choir (Performers).   Deacon Responses: Sadiq Attallah (Performers).   Priests: Father Marcus Girgis of Matai, Father Shenouda as-Suryani (current Coptic Patriarch, His Holiness Pope Shenouda III) (Performers).   Priests: Father Gregorius, Father Ibrahim Aziz (Performers).   The American Folklife Center at the Library of Congress (Ownership).   Sound Recording (Form)."
+      ],
+      "digitized": true,
+      "extract_timestamp": "2025-08-07T07:03:11.636Z",
+      "group": [
+        "paprika-music",
+        "ihas/mets",
+        "performingarts"
+      ],
+      "hassegments": false,
+      "id": "http://www.loc.gov/item/ihas.200181952/",
+      "image_url": [],
+      "index": 1,
+      "language": [
+        "english"
+      ],
+      "mime_type": [
+        "audio/mpeg",
+        "audio/wav",
+        "audio/mp3"
+      ],
+      "online_format": [
+        "audio"
+      ],
+      "original_format": [
+        "sound recording"
+      ],
+      "partof": [
+        "coptic orthodox liturgical chant and hymnody",
+        "music division",
+        "american folklife center",
+        "coptic music recording gallery",
+        "performing arts encyclopedia"
+      ],
+      "score": 8.833054,
+      "shelf_id": "ihas.200181952",
+      "site": [
+        "performingarts"
+      ],
+      "subject": [
+        "chants"
+      ],
+      "timestamp": "2025-08-07T07:43:35.445Z",
+      "title": "Divine liturgy of St. Basil with its hymns",
+      "type": [
+        "sound recording-musical"
+      ],
+      "url": "https://www.loc.gov/item/ihas.200181952/"
+    },
+    {
+      "access_restricted": false,
+      "aka": [
+        "https://hdl.loc.gov/loc.music/ihas.200197114",
+        "http://www.loc.gov/item/ihas.200197114/",
+        "http://www.loc.gov/resource/music.musihas-200197114/"
+      ],
+      "campaigns": [],
+      "contributor": [
+        "seeger, pete"
+      ],
+      "date": "2007",
+      "dates": [
+        "2007"
+      ],
+      "description": [
+        ""
+      ],
+      "digitized": true,
+      "extract_timestamp": "2025-08-07T07:16:43.873Z",
+      "group": [
+        "paprika-music"
+      ],
+      "hassegments": false,
+      "id": "http://www.loc.gov/item/ihas.200197114/",
+      "image_url": [
+        "https://tile.loc.gov/streaming-services/iiif/public:music:musihas-200197114:musihas-200197114.0001.mp4/full/256,/0/1263.41776,0/default.jpg"
+      ],
+      "index": 2,
+      "language": [
+        "english"
+      ],
+      "mime_type": [
+        "video/mp4"
+      ],
+      "number": [
+        "http://www.loc.gov/resource/ihas.200197114.0"
+      ],
+      "online_format": [
+        "video"
+      ],
+      "original_format": [
+        "film, video"
+      ],
+      "partof": [
+        "the library of congress celebrates the songs of america",
+        "american folklife center"
+      ],
+      "score": 8.833054,
+      "shelf_id": "ihas.200197114",
+      "subject": [
+        "folk songs",
+        "united states",
+        "seeger family",
+        "videorecording"
+      ],
+      "timestamp": "2025-08-07T07:45:10.896Z",
+      "title": "Sing Along with Pete Seeger",
+      "type": [
+        "moving image"
+      ],
+      "url": "https://www.loc.gov/item/ihas.200197114/"
+    },
+    {
+      "access_restricted": false,
+      "aka": [
+        "http://www.loc.gov/item/2003542613/",
+        "http://lccn.loc.gov/2003542613",
+        "http://www.pbs.org/americaquilts/"
+      ],
+      "campaigns": [],
+      "contributor": [
+        "wisconsin public television",
+        "public broadcasting service (u.s.)"
+      ],
+      "date": "2003",
+      "dates": [
+        "2003"
+      ],
+      "description": [
+        "Presents a discussion of American quilts and quilting, based on the documentary television program American quilts produced by Wisconsin Public Television and aired on PBS."
+      ],
+      "digitized": true,
+      "extract_timestamp": "2023-06-02T20:38:12.192Z",
+      "group": [
+        "catalog-split-10",
+        "catalog",
+        "main-catalog-split-10",
+        "main-catalog"
+      ],
+      "hassegments": false,
+      "id": "http://lccn.loc.gov/2003542613",
+      "image_url": [],
+      "index": 3,
+      "language": [
+        "english"
+      ],
+      "location": [
+        "united states"
+      ],
+      "number": [
+        "2003542613",
+        "2006-02-27t15:45:10"
+      ],
+      "original_format": [
+        "book"
+      ],
+      "other_title": [
+        "PBS quilts"
+      ],
+      "partof": [
+        "catalog"
+      ],
+      "score": 8.524838,
+      "shelf_id": "NK9112",
+      "site": [
+        "catalog"
+      ],
+      "subject": [
+        "quilts",
+        "quilting",
+        "american quilts (television program)",
+        "quiltmakers",
+        "united states"
+      ],
+      "timestamp": "2023-07-08T15:01:55.217Z",
+      "title": "Quilts",
+      "type": [
+        "text"
+      ],
+      "url": "//lccn.loc.gov/2003542613"
+    },
+    {
+      "access_restricted": false,
+      "aka": [
+        "http://lccn.loc.gov/20027158",
+        "http://www.loc.gov/item/20027158/",
+        "http://www.loc.gov/resource/gdcmassbookdig.parksmemorialsof00illi/",
+        "https://hdl.loc.gov/loc.gdc/scd0001.00008830812",
+        "http://www.loc.gov/resource/scd0001.00008830812/"
+      ],
+      "campaigns": [],
+      "contributor": [
+        "illinois. department of public works and buildings",
+        "service, c. m."
+      ],
+      "date": "1920",
+      "dates": [
+        "1920"
+      ],
+      "description": [
+        "Also available in digital form."
+      ],
+      "digitized": true,
+      "extract_timestamp": "2022-07-23T20:40:29.643Z",
+      "group": [
+        "paprika-iabooks",
+        "catalog-split-09",
+        "catalog",
+        "main-catalog-split-09",
+        "main-catalog"
+      ],
+      "hassegments": true,
+      "id": "http://www.loc.gov/item/20027158/",
+      "image_url": [
+        "https://tile.loc.gov/image-services/iiif/public:gdcmassbookdig:parksmemorialsof00illi:parksmemorialsof00illi_0005/full/pct:25.0/0/default.jpg#h=836&w=542",
+        "https://tile.loc.gov/image-services/iiif/public:gdcmassbookdig:parksmemorialsof00illi:parksmemorialsof00illi_0005/full/pct:50.0/0/default.jpg#h=1672&w=1084",
+        "https://tile.loc.gov/image-services/iiif/public:gdcmassbookdig:parksmemorialsof00illi:parksmemorialsof00illi_0005/full/pct:100.0/0/default.jpg#h=3345&w=2169"
+      ],
+      "index": 4,
+      "language": [
+        "english"
+      ],
+      "location": [
+        "illinois"
+      ],
+      "mime_type": [
+        "text/xml",
+        "image/jpeg",
+        "image/jp2",
+        "application/pdf",
+        "application/json",
+        "text/plain"
+      ],
+      "number": [
+        "20027158",
+        "2019-01-05t10:22:11"
+      ],
+      "online_format": [
+        "online text",
+        "image",
+        "pdf"
+      ],
+      "original_format": [
+        "book"
+      ],
+      "partof": [
+        "general collections",
+        "catalog",
+        "selected digitized books"
+      ],
+      "score": 7.7877965,
+      "shelf_id": "SB482.I3 A5 1920 F542 .I29",
+      "site": [
+        "catalog"
+      ],
+      "subject": [
+        "memorials",
+        "parks",
+        "illinois"
+      ],
+      "timestamp": "2023-06-03T11:58:52.110Z",
+      "title": "Parks & memorials of the state of Illinois under the supervision of the Department of public works and buildings ...",
+      "type": [
+        "text"
+      ],
+      "url": "https://www.loc.gov/item/20027158/"
+    },
+    {
+      "access_restricted": false,
+      "aka": [
+        "http://lccn.loc.gov/22027107",
+        "http://www.loc.gov/item/22027107/",
+        "http://www.loc.gov/resource/gdcmassbookdig.parksmemorialsof01illi/",
+        "https://hdl.loc.gov/loc.gdc/22027107",
+        "http://www.loc.gov/resource/22027107/"
+      ],
+      "campaigns": [],
+      "contributor": [
+        "illinois. department of public works and buildings",
+        "service, c. m."
+      ],
+      "date": "1922",
+      "dates": [
+        "1922"
+      ],
+      "description": [
+        "Also available in digital form."
+      ],
+      "digitized": true,
+      "extract_timestamp": "2022-09-24T16:49:58.294Z",
+      "group": [
+        "paprika-iabooks",
+        "catalog-split-05",
+        "catalog",
+        "main-catalog-split-05",
+        "main-catalog"
+      ],
+      "hassegments": true,
+      "id": "http://www.loc.gov/item/22027107/",
+      "image_url": [
+        "https://tile.loc.gov/image-services/iiif/public:gdcmassbookdig:parksmemorialsof01illi:parksmemorialsof01illi_0005/full/pct:25.0/0/default.jpg#h=860&w=533",
+        "https://tile.loc.gov/image-services/iiif/public:gdcmassbookdig:parksmemorialsof01illi:parksmemorialsof01illi_0005/full/pct:50.0/0/default.jpg#h=1721&w=1066",
+        "https://tile.loc.gov/image-services/iiif/public:gdcmassbookdig:parksmemorialsof01illi:parksmemorialsof01illi_0005/full/pct:100.0/0/default.jpg#h=3442&w=2133"
+      ],
+      "index": 5,
+      "language": [
+        "english"
+      ],
+      "location": [
+        "illinois"
+      ],
+      "mime_type": [
+        "text/xml",
+        "image/jpeg",
+        "image/jp2",
+        "application/pdf",
+        "application/json",
+        "text/plain"
+      ],
+      "number": [
+        "22027107",
+        "2013-05-10t10:23:53",
+        "2023-02-17t08:01:19"
+      ],
+      "online_format": [
+        "online text",
+        "image",
+        "pdf"
+      ],
+      "original_format": [
+        "book"
+      ],
+      "partof": [
+        "general collections",
+        "catalog",
+        "selected digitized books"
+      ],
+      "score": 7.7877965,
+      "shelf_id": "SB482.I3 A5 1922",
+      "site": [
+        "catalog"
+      ],
+      "subject": [
+        "memorials",
+        "parks",
+        "illinois"
+      ],
+      "timestamp": "2023-06-04T19:43:08.099Z",
+      "title": "Parks & memorials of the state of Illinois. Under the supervision of the Department of public works and buildings ...",
+      "type": [
+        "text"
+      ],
+      "url": "https://www.loc.gov/item/22027107/"
+    },
+    {
+      "access_restricted": false,
+      "aka": [
+        "http://www.loc.gov/collections/hispano-music-and-culture-from-the-northern-rio-grande/about-this-collection/",
+        "http://www.loc.gov/collections/hispano/",
+        "https://lccn.loc.gov/2004695185",
+        "https://www.loc.gov/item/2004695185",
+        "http://lccn.loc.gov/2004695185",
+        "http://www.loc.gov/item/2004695185/",
+        "https://hdl.loc.gov/loc.afc/collafc.af000001"
+      ],
+      "campaigns": [],
+      "contributor": [
+        "cantú, josé ignacio",
+        "rael, juan bautista",
+        "archive of folk song (u.s.)",
+        "trujillo, amado",
+        "american folklife center",
+        "lobato, julián",
+        "martínez y lavadi, samuel",
+        "chávez, adelaido",
+        "anaya, nieves",
+        "romero, alfredo",
+        "espinosa, rosabel l.",
+        "arellano, narciso",
+        "lamadrid, enrique r.",
+        "arellano, esequiel",
+        "garcía, pedro",
+        "library of congress. national digital library program",
+        "anaya, ernestina",
+        "mares, remigio",
+        "medina, esteban",
+        "montoya, luis",
+        "lobato, salomé",
+        "archuleta, ricardo",
+        "chávez, adolfo"
+      ],
+      "count": 227,
+      "date": "1940",
+      "dates": [
+        "[1939 TO 1951]",
+        "1940"
+      ],
+      "description": [
+        "Hispano Music and Culture of the Northern Rio Grande: The Juan B. Rael Collection is an online presentation of an ethnographic field collection documenting religious and secular music of Spanish-speaking residents of rural Northern New Mexico and Southern Colorado. In 1940, Juan Bautista Rael of Stanford University, a native of Arroyo Hondo, New Mexico, used disc recording equipment supplied by the Archive of American Folk Song (American Folklife Center archive) to document alabados (hymns), folk drama, wedding songs, and dance tunes. The recordings included in the collection were made in Alamosa, Manassa, and Antonito, Colorado, and in Cerro and Arroyo Hondo, New Mexico. In addition to these recordings, the collection includes manuscript materials and publications authored by Rael which provide insight into the rich musical heritage and cultural traditions of this region."
+      ],
+      "digitized": true,
+      "extract_timestamp": "2025-08-10T05:06:14.377Z",
+      "group": [
+        "collections-portal"
+      ],
+      "hassegments": false,
+      "id": "http://www.loc.gov/collections/hispano-music-and-culture-from-the-northern-rio-grande/about-this-collection/",
+      "image_url": [
+        "https://www.loc.gov/static/collections/hispano-music-and-culture-from-the-northern-rio-grande/500_500.jpg"
+      ],
+      "index": 6,
+      "items": "https://www.loc.gov/collections/hispano-music-and-culture-from-the-northern-rio-grande/",
+      "language": [
+        "english",
+        "spanish"
+      ],
+      "location": [
+        "mexico",
+        "rio grande valley region",
+        "colorado",
+        "texas",
+        "new mexico",
+        "united states"
+      ],
+      "number": [
+        "2025-06-06t19:19:10.700000",
+        "2004695185"
+      ],
+      "original_format": [
+        "collection",
+        "sound recording"
+      ],
+      "partof": [
+        "american folklife center",
+        "digital collections",
+        "hispano music and culture of the northern rio grande: the juan b. rael collection"
+      ],
+      "score": 6.745185,
+      "shelf_id": "~/collections/hispano-music-and-culture-from-the-northern-rio-grande/about-this-collection/",
+      "subject": [
+        "personal correspondence",
+        "songs",
+        "hymns",
+        "manuscripts",
+        "sound recordings",
+        "hispanic heritage",
+        "albados",
+        "unaccompanied vocal",
+        "intrumental music",
+        "city and regional histories",
+        "performing arts",
+        "arts and culture",
+        "field recordings",
+        "correspondence",
+        "local history & folklife",
+        "immigration and ethnic heritage",
+        "american history",
+        "photographs",
+        "music",
+        "folk music",
+        "culture and folklife"
+      ],
+      "timestamp": "2025-08-10T06:22:42.282Z",
+      "title": "Hispano Music and Culture of the Northern Rio Grande: The Juan B. Rael Collection",
+      "type": [
+        "collection"
+      ],
+      "url": "https://www.loc.gov/collections/hispano-music-and-culture-from-the-northern-rio-grande/about-this-collection/"
+    }
+  ],
+  "resources": [
+    {
+      "caption": "",
+      "files": [
+        [
+          {
+            "height": 255,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0001/full/pct:6.25/0/default.jpg",
+            "width": 386
+          },
+          {
+            "height": 511,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0001/full/pct:12.5/0/default.jpg",
+            "width": 773
+          },
+          {
+            "height": 1023,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0001/full/pct:25/0/default.jpg",
+            "width": 1546
+          },
+          {
+            "height": 2047,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0001/full/pct:50/0/default.jpg",
+            "width": 3092
+          },
+          {
+            "height": 4095,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0001/full/pct:100/0/default.jpg",
+            "width": 6185
+          },
+          {
+            "height": 4095,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0001/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 3764792,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0001.jp2",
+            "width": 6185
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 5369,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0001.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0001.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0001.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 236,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0002/full/pct:6.25/0/default.jpg",
+            "width": 379
+          },
+          {
+            "height": 473,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0002/full/pct:12.5/0/default.jpg",
+            "width": 758
+          },
+          {
+            "height": 947,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0002/full/pct:25/0/default.jpg",
+            "width": 1517
+          },
+          {
+            "height": 1895,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0002/full/pct:50/0/default.jpg",
+            "width": 3035
+          },
+          {
+            "height": 3791,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0002/full/pct:100/0/default.jpg",
+            "width": 6071
+          },
+          {
+            "height": 3791,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0002/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 3430974,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0002.jp2",
+            "width": 6071
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 1828,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0002.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0002.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0002.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 306,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_001/full/pct:6.25/0/default.jpg",
+            "width": 186
+          },
+          {
+            "height": 612,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_001/full/pct:12.5/0/default.jpg",
+            "width": 372
+          },
+          {
+            "height": 1224,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_001/full/pct:25/0/default.jpg",
+            "width": 745
+          },
+          {
+            "height": 2449,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_001/full/pct:50/0/default.jpg",
+            "width": 1490
+          },
+          {
+            "height": 4899,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_001/full/pct:100/0/default.jpg",
+            "width": 2980
+          },
+          {
+            "height": 4899,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_001/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 2130752,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0003_001.jp2",
+            "width": 2980
+          }
+        ],
+        [
+          {
+            "height": 306,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/full/pct:6.25/0/default.jpg",
+            "width": 186
+          },
+          {
+            "height": 612,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/full/pct:12.5/0/default.jpg",
+            "width": 372
+          },
+          {
+            "height": 1224,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/full/pct:25/0/default.jpg",
+            "width": 745
+          },
+          {
+            "height": 2449,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/full/pct:50/0/default.jpg",
+            "width": 1490
+          },
+          {
+            "height": 4899,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/full/pct:100/0/default.jpg",
+            "width": 2980
+          },
+          {
+            "height": 4899,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 2632834,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0003_002.jp2",
+            "width": 2980
+          }
+        ],
+        [
+          {
+            "height": 317,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0004/full/pct:6.25/0/default.jpg",
+            "width": 242
+          },
+          {
+            "height": 635,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0004/full/pct:12.5/0/default.jpg",
+            "width": 485
+          },
+          {
+            "height": 1270,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0004/full/pct:25/0/default.jpg",
+            "width": 971
+          },
+          {
+            "height": 2541,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0004/full/pct:50/0/default.jpg",
+            "width": 1943
+          },
+          {
+            "height": 5083,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0004/full/pct:100/0/default.jpg",
+            "width": 3886
+          },
+          {
+            "height": 5083,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0004/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 2956576,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0004.jp2",
+            "width": 3886
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 2418,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0004.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0004.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0004.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 236,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0005/full/pct:6.25/0/default.jpg",
+            "width": 379
+          },
+          {
+            "height": 473,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0005/full/pct:12.5/0/default.jpg",
+            "width": 758
+          },
+          {
+            "height": 947,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0005/full/pct:25/0/default.jpg",
+            "width": 1517
+          },
+          {
+            "height": 1895,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0005/full/pct:50/0/default.jpg",
+            "width": 3035
+          },
+          {
+            "height": 3791,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0005/full/pct:100/0/default.jpg",
+            "width": 6071
+          },
+          {
+            "height": 3791,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0005/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 3449255,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0005.jp2",
+            "width": 6071
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 2999,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0005.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0005.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0005.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 203,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0006/full/pct:12.5/0/default.jpg",
+            "width": 459
+          },
+          {
+            "height": 406,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0006/full/pct:25/0/default.jpg",
+            "width": 919
+          },
+          {
+            "height": 812,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0006/full/pct:50/0/default.jpg",
+            "width": 1838
+          },
+          {
+            "height": 1625,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0006/full/pct:100/0/default.jpg",
+            "width": 3677
+          },
+          {
+            "height": 1625,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0006/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 889372,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0006.jp2",
+            "width": 3677
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 40837,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0006.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0006.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0006.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 172,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0007/full/pct:12.5/0/default.jpg",
+            "width": 457
+          },
+          {
+            "height": 344,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0007/full/pct:25/0/default.jpg",
+            "width": 914
+          },
+          {
+            "height": 689,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0007/full/pct:50/0/default.jpg",
+            "width": 1829
+          },
+          {
+            "height": 1378,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0007/full/pct:100/0/default.jpg",
+            "width": 3658
+          },
+          {
+            "height": 1378,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0007/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 746946,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0007.jp2",
+            "width": 3658
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 17727,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0007.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0007.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0007.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 253,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0008/full/pct:6.25/0/default.jpg",
+            "width": 310
+          },
+          {
+            "height": 506,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0008/full/pct:12.5/0/default.jpg",
+            "width": 621
+          },
+          {
+            "height": 1013,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0008/full/pct:25/0/default.jpg",
+            "width": 1242
+          },
+          {
+            "height": 2026,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0008/full/pct:50/0/default.jpg",
+            "width": 2485
+          },
+          {
+            "height": 4052,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0008/full/pct:100/0/default.jpg",
+            "width": 4970
+          },
+          {
+            "height": 4052,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0008/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 3011542,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0008.jp2",
+            "width": 4970
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 2543,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0008.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0008.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0008.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 238,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0009/full/pct:6.25/0/default.jpg",
+            "width": 378
+          },
+          {
+            "height": 476,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0009/full/pct:12.5/0/default.jpg",
+            "width": 756
+          },
+          {
+            "height": 952,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0009/full/pct:25/0/default.jpg",
+            "width": 1513
+          },
+          {
+            "height": 1905,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0009/full/pct:50/0/default.jpg",
+            "width": 3026
+          },
+          {
+            "height": 3810,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0009/full/pct:100/0/default.jpg",
+            "width": 6052
+          },
+          {
+            "height": 3810,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0009/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 3434562,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0009.jp2",
+            "width": 6052
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 3917,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0009.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0009.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0009.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 276,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0010/full/pct:12.5/0/default.jpg",
+            "width": 457
+          },
+          {
+            "height": 553,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0010/full/pct:25/0/default.jpg",
+            "width": 914
+          },
+          {
+            "height": 1107,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0010/full/pct:50/0/default.jpg",
+            "width": 1829
+          },
+          {
+            "height": 2214,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0010/full/pct:100/0/default.jpg",
+            "width": 3658
+          },
+          {
+            "height": 2214,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0010/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 1200643,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0010.jp2",
+            "width": 3658
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 23286,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0010.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0010.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0010.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 252,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0011/full/pct:6.25/0/default.jpg",
+            "width": 310
+          },
+          {
+            "height": 504,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0011/full/pct:12.5/0/default.jpg",
+            "width": 621
+          },
+          {
+            "height": 1009,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0011/full/pct:25/0/default.jpg",
+            "width": 1242
+          },
+          {
+            "height": 2019,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0011/full/pct:50/0/default.jpg",
+            "width": 2484
+          },
+          {
+            "height": 4038,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0011/full/pct:100/0/default.jpg",
+            "width": 4969
+          },
+          {
+            "height": 4038,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0011/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 3005953,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0011.jp2",
+            "width": 4969
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 3612,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0011.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0011.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0011.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 238,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0012/full/pct:6.25/0/default.jpg",
+            "width": 379
+          },
+          {
+            "height": 476,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0012/full/pct:12.5/0/default.jpg",
+            "width": 758
+          },
+          {
+            "height": 952,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0012/full/pct:25/0/default.jpg",
+            "width": 1517
+          },
+          {
+            "height": 1905,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0012/full/pct:50/0/default.jpg",
+            "width": 3035
+          },
+          {
+            "height": 3810,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0012/full/pct:100/0/default.jpg",
+            "width": 6071
+          },
+          {
+            "height": 3810,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0012/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 3441694,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0012.jp2",
+            "width": 6071
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 4837,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0012.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0012.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0012.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 300,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0013_001/full/pct:6.25/0/default.jpg",
+            "width": 180
+          },
+          {
+            "height": 601,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0013_001/full/pct:12.5/0/default.jpg",
+            "width": 361
+          },
+          {
+            "height": 1202,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0013_001/full/pct:25/0/default.jpg",
+            "width": 723
+          },
+          {
+            "height": 2404,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0013_001/full/pct:50/0/default.jpg",
+            "width": 1446
+          },
+          {
+            "height": 4809,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0013_001/full/pct:100/0/default.jpg",
+            "width": 2892
+          },
+          {
+            "height": 4809,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0013_001/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 1873287,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0013_001.jp2",
+            "width": 2892
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 1580,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0003_001.alto.xml",
+            "width": null
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 1438,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0013_001.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0003_001.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0003_001.alto.xml&format=alto_xml"
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0013_001.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0013_001.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 300,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0013_002/full/pct:6.25/0/default.jpg",
+            "width": 180
+          },
+          {
+            "height": 601,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0013_002/full/pct:12.5/0/default.jpg",
+            "width": 361
+          },
+          {
+            "height": 1202,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0013_002/full/pct:25/0/default.jpg",
+            "width": 723
+          },
+          {
+            "height": 2404,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0013_002/full/pct:50/0/default.jpg",
+            "width": 1446
+          },
+          {
+            "height": 4809,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0013_002/full/pct:100/0/default.jpg",
+            "width": 2892
+          },
+          {
+            "height": 4809,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0013_002/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 1862208,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0013_002.jp2",
+            "width": 2892
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 1700,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0003_002.alto.xml",
+            "width": null
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 1438,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0013_002.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0003_002.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0003_002.alto.xml&format=alto_xml"
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0013_002.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0013_002.alto.xml&format=alto_xml"
+          }
+        ],
+        [
+          {
+            "height": 316,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0014/full/pct:6.25/0/default.jpg",
+            "width": 242
+          },
+          {
+            "height": 633,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0014/full/pct:12.5/0/default.jpg",
+            "width": 485
+          },
+          {
+            "height": 1266,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0014/full/pct:25/0/default.jpg",
+            "width": 971
+          },
+          {
+            "height": 2532,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0014/full/pct:50/0/default.jpg",
+            "width": 1943
+          },
+          {
+            "height": 5064,
+            "levels": 1,
+            "mimetype": "image/jpeg",
+            "url": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0014/full/pct:100/0/default.jpg",
+            "width": 3886
+          },
+          {
+            "height": 5064,
+            "info": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0014/info.json",
+            "levels": 6,
+            "mimetype": "image/jp2",
+            "size": 2943061,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0014.jp2",
+            "width": 3886
+          },
+          {
+            "height": null,
+            "levels": 1,
+            "mimetype": "application/xml",
+            "size": 2896,
+            "url": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0014.alto.xml",
+            "width": null
+          },
+          {
+            "fulltext_service": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0014.alto.xml&format=alto_xml&full_text=1",
+            "mimetype": "text/plain",
+            "use": "text",
+            "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service?segment=/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501_ms0014.alto.xml&format=alto_xml"
+          }
+        ]
+      ],
+      "image": "https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:50:1:afc2019048_0501:afc2019048_0501_ms0003_002/full/pct:6.25/0/default.jpg",
+      "pdf": "https://tile.loc.gov/storage-services/service/afc/afc2019048/af/c2/01/90/48/_0/50/1/afc2019048_0501/afc2019048_0501.pdf",
+      "representative_index": 3,
+      "url": "https://www.loc.gov/resource/afc2019048.afc2019048_0501/",
+      "word_coordinates": "https://tile.loc.gov/text-services/word-coordinates-service"
+    }
+  ],
+  "timestamp": 1754877352543,
+  "type": "zoom"
+}

@@ -147,14 +147,14 @@ const RecordsTable: React.FC<RecordsTableProps> = ({
                 >
                   <TableCell>
                     <Avatar
-                      src={record.image_url}
+                      src={record.image_path}
                       sx={{
                         width: 48,
                         height: 48,
-                        bgcolor: record.image_url ? 'transparent' : 'grey.300',
+                        bgcolor: record.image_path ? 'transparent' : 'grey.300',
                       }}
                     >
-                      {!record.image_url && <ImageIcon />}
+                      {!record.image_path && <ImageIcon />}
                     </Avatar>
                   </TableCell>
                   <TableCell>

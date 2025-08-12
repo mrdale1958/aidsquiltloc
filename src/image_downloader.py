@@ -1,314 +1,396 @@
 """
 Image downloader for AIDS Memorial Quilt Records
-Downloads and saves images from the Library of Congress collection
+Handles IIIF image downloads with validation and retry logic
 """
 
 import asyncio
 import logging
+from typing import Optional, List, Dict, Any
 from pathlib import Path
-from typing import List, Optional, Dict, Any
-from urllib.parse import urlparse, unquote
-import hashlib
-
 import aiohttp
 import aiofiles
 from PIL import Image
+import io
+
+from config.settings import ScraperConfig
 
 logger = logging.getLogger(__name__)
 
 
+class ImageDownloadError(Exception):
+    """Exception raised during image download process"""
+    pass
+
+
 class ImageDownloader:
-    """Downloads and processes images from LOC collection"""
+    """
+    Downloads and validates images from IIIF endpoints
     
-    def __init__(self, settings):
-        self.settings = settings
-        self.session: Optional[aiohttp.ClientSession] = None
-        # Use image-specific concurrency settings
-        image_concurrency = getattr(settings, 'max_concurrent_image_downloads', settings.max_concurrent_downloads)
-        self.semaphore = asyncio.Semaphore(image_concurrency)
+    Provides asynchronous image downloading with proper validation,
+    retry logic, and file management for the AIDS Memorial Quilt collection
+    """
+    
+    def __init__(self, config: ScraperConfig) -> None:
+        """
+        Initialize the image downloader
         
-    async def _get_session(self) -> aiohttp.ClientSession:
-        """Get or create aiohttp session"""
-        if self.session is None or self.session.closed:
-            timeout = aiohttp.ClientTimeout(total=self.settings.request_timeout)
+        Args:
+            config: Scraper configuration settings
+        """
+        self.config = config
+        self.session: Optional[aiohttp.ClientSession] = None
+        self._semaphore = asyncio.Semaphore(config.max_concurrent_downloads)
+        
+        # Supported image formats
+        self.supported_formats = {'.jpg', '.jpeg', '.png', '.tiff', '.tif'}
+        
+        # Quality settings for different resolutions
+        self.quality_settings = {
+            '200': {'quality': 85, 'optimize': True},
+            '400': {'quality': 90, 'optimize': True},
+            '800': {'quality': 95, 'optimize': True},
+            '1200': {'quality': 95, 'optimize': False},
+            'full': {'quality': 100, 'optimize': False}
+        }
+    
+    async def __aenter__(self) -> 'ImageDownloader':
+        """Async context manager entry"""
+        await self.initialize_session()
+        return self
+        
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Async context manager exit"""
+        await self.close_session()
+    
+    async def initialize_session(self) -> None:
+        """Initialize the aiohttp session for image downloads"""
+        if self.session is None:
+            timeout = aiohttp.ClientTimeout(total=self.config.request_timeout)
             headers = {
-                'User-Agent': 'AIDS-Quilt-Scraper/1.0 (Educational Research)'
+                'User-Agent': self.config.user_agent,
+                'Accept': 'image/*'
             }
+            
+            connector = aiohttp.TCPConnector(
+                limit=self.config.max_concurrent_downloads * 2,
+                limit_per_host=self.config.max_concurrent_downloads
+            )
             
             self.session = aiohttp.ClientSession(
                 timeout=timeout,
-                headers=headers
+                headers=headers,
+                connector=connector
             )
-        return self.session
+            logger.info("Image downloader session initialized")
     
-    def _parse_manuscript_info(self, url: str) -> tuple[Optional[str], Optional[str]]:
-        """Extract manuscript page and resolution from URL"""
-        manuscript = None
-        resolution = None
-        
-        # Extract manuscript page (e.g., ms0001, ms0007, ms0020)
-        if '_ms' in url:
-            # Look for pattern like afc2019048_0001_ms0007
-            parts = url.split('/')
-            for part in parts:
-                if '_ms' in part:
-                    # Extract the ms part: afc2019048_0001_ms0007 -> ms0007
-                    ms_match = part.split('_ms')
-                    if len(ms_match) > 1:
-                        # Remove file extension if present: ms0001.jp2 -> ms0001
-                        manuscript_raw = ms_match[1]
-                        manuscript = f"ms{Path(manuscript_raw).stem}"
-                    break
-        
-        # Extract resolution from IIIF URL (e.g., pct:12.5, pct:100, full)
-        if '/full/' in url:
-            try:
-                res_part = url.split('/full/')[1].split('/')[0]
-                # Clean up resolution naming
-                if res_part.startswith('pct:'):
-                    # pct:12.5 -> pct12_5, pct:100 -> pct100
-                    resolution = f"pct{res_part[4:].replace('.', '_')}"
-                elif res_part == 'max':
-                    resolution = 'max'
-                else:
-                    resolution = res_part.replace(':', '_').replace('.', '_')
-            except IndexError:
-                pass
-        
-        return manuscript, resolution
+    async def close_session(self) -> None:
+        """Close the aiohttp session"""
+        if self.session:
+            await self.session.close()
+            self.session = None
+            logger.info("Image downloader session closed")
     
-    def _get_safe_filename(self, url: str, item_id: str) -> str:
-        """Generate a safe filename from URL with manuscript and resolution info"""
-        parsed_url = urlparse(url)
-        
-        # Check if this is a direct file URL (storage-services) or IIIF URL
-        path_name = Path(unquote(parsed_url.path)).name
-        
-        # For direct file URLs, use the existing filename if it already contains item_id and manuscript info
-        if 'storage-services' in url and item_id in path_name and '_ms' in path_name:
-            # Direct file URLs already have proper naming: afc2019048_0001_ms0001.jp2
-            safe_filename = path_name
-        else:
-            # For IIIF URLs or other cases, construct filename from parsed info
-            manuscript, resolution = self._parse_manuscript_info(url)
-            
-            # Determine file extension
-            if '.' in path_name:
-                ext = Path(path_name).suffix
-            else:
-                # Default to .jpg for IIIF images
-                ext = '.jpg'
-            
-            # Build filename with manuscript and resolution info
-            if manuscript and resolution:
-                # Format: afc2019048_0001_ms0001_pct25.jpg
-                safe_filename = f"{item_id}_{manuscript}_{resolution}{ext}"
-            elif manuscript:
-                # Format: afc2019048_0001_ms0001.jpg
-                safe_filename = f"{item_id}_{manuscript}{ext}"
-            else:
-                # Fallback to hash-based naming
-                url_hash = hashlib.md5(url.encode()).hexdigest()[:8]
-                safe_filename = f"{item_id}_{url_hash}{ext}"
-        
-        # Ensure safe characters only
-        safe_filename = "".join(c for c in safe_filename if c.isalnum() or c in '.-_')
-        
-        return safe_filename
-    
-    def _is_valid_image_format(self, filename: str) -> bool:
-        """Check if the file has a supported image format"""
-        return any(filename.lower().endswith(fmt) for fmt in self.settings.supported_image_formats)
-    
-    async def _download_single_image(self, url: str, item_id: str, metadata: Dict[str, Any], max_retries: int = 3) -> Optional[Path]:
-        """Download a single image with concurrency control and retry logic"""
-        async with self.semaphore:
-            session = await self._get_session()
-            
-            # Parse manuscript and resolution info
-            manuscript, resolution = self._parse_manuscript_info(url)
-            
-            # Generate safe filename
-            filename = self._get_safe_filename(url, item_id)
-            
-            # Skip if not a supported image format
-            if not self._is_valid_image_format(filename):
-                logger.warning("Skipping unsupported format: %s", filename)
-                return None
-            
-            # Create organized directory structure
-            block_num = item_id.split('_')[-1]  # Extract 0001 from afc2019048_0001
-            block_dir = self.settings.images_dir / f"block_{block_num}"
-            
-            # Create manuscript subdirectory if we have manuscript info
-            if manuscript:
-                target_dir = block_dir / manuscript
-            else:
-                target_dir = block_dir
-            
-            # Ensure directory exists
-            target_dir.mkdir(parents=True, exist_ok=True)
-            
-            filepath = target_dir / filename
-            
-            # Skip if file already exists
-            if filepath.exists():
-                logger.info("Image already exists: %s", filepath.relative_to(self.settings.images_dir))
-                return filepath
-            
-            # Retry logic
-            for attempt in range(max_retries + 1):
-                try:
-                    logger.debug("Downloading image (attempt %d/%d): %s -> %s", 
-                               attempt + 1, max_retries + 1, url, filepath.relative_to(self.settings.images_dir))
-                    
-                    async with session.get(url) as response:
-                        response.raise_for_status()
-                        
-                        # Check content type
-                        content_type = response.headers.get('content-type', '')
-                        if not content_type.startswith('image/'):
-                            logger.warning("URL does not appear to be an image: %s", url)
-                            return None
-                        
-                        # Check file size
-                        content_length = response.headers.get('content-length')
-                        if content_length:
-                            size_mb = int(content_length) / (1024 * 1024)
-                            if size_mb > self.settings.max_image_size_mb:
-                                logger.warning("Image too large (%s MB): %s", size_mb, url)
-                                return None
-                        
-                        # Download and save
-                        async with aiofiles.open(filepath, 'wb') as f:
-                            async for chunk in response.content.iter_chunked(8192):
-                                await f.write(chunk)
-                    
-                    # Verify the image is valid
-                    try:
-                        with Image.open(filepath) as img:
-                            img.verify()
-                        
-                        # Log with size info
-                        file_size = filepath.stat().st_size
-                        logger.info("Downloaded image: %s (%s bytes)", 
-                                  filepath.relative_to(self.settings.images_dir), 
-                                  f"{file_size:,}")
-                        
-                        # Rate limiting - only delay on successful download
-                        image_delay = getattr(self.settings, 'image_download_delay', 1.0)
-                        await asyncio.sleep(image_delay)
-                        
-                        return filepath
-                        
-                    except Exception as e:
-                        logger.error("Invalid image file, removing: %s (%s)", filename, e)
-                        filepath.unlink(missing_ok=True)
-                        # Don't return None here, continue to retry
-                        if attempt < max_retries:
-                            continue
-                        return None
-                
-                except (aiohttp.ClientError, asyncio.TimeoutError) as e:
-                    if attempt < max_retries:
-                        delay = (2 ** attempt) * 1.0  # Exponential backoff: 1s, 2s, 4s
-                        logger.warning("Error downloading %s (attempt %d/%d): %s. Retrying in %ss...", 
-                                     url, attempt + 1, max_retries + 1, e, delay)
-                        await asyncio.sleep(delay)
-                        continue
-                    else:
-                        logger.error("Failed to download after %d attempts: %s (%s)", max_retries + 1, url, e)
-                        return None
-                except Exception as e:
-                    logger.error("Unexpected error downloading %s: %s", url, e)
-                    return None
-            
-            return None
-                        logger.warning("URL does not appear to be an image: %s", url)
-                        return None
-                    
-                    # Check file size
-                    content_length = response.headers.get('content-length')
-                    if content_length:
-                        size_mb = int(content_length) / (1024 * 1024)
-                        if size_mb > self.settings.max_image_size_mb:
-                            logger.warning("Image too large (%s MB): %s", size_mb, url)
-                            return None
-                    
-                    # Download and save
-                    async with aiofiles.open(filepath, 'wb') as f:
-                        async for chunk in response.content.iter_chunked(8192):
-                            await f.write(chunk)
-                
-                # Verify the image is valid
-                try:
-                    with Image.open(filepath) as img:
-                        img.verify()
-                    
-                    # Log with size info
-                    file_size = filepath.stat().st_size
-                    logger.info("Downloaded image: %s (%s bytes)", 
-                              filepath.relative_to(self.settings.images_dir), 
-                              f"{file_size:,}")
-                    return filepath
-                    
-                except Exception as e:
-                    logger.error("Invalid image file, removing: %s (%s)", filename, e)
-                    filepath.unlink(missing_ok=True)
-                    return None
-                
-            except aiohttp.ClientError as e:
-                logger.error("Error downloading %s: %s", url, e)
-                return None
-            except Exception as e:
-                logger.error("Unexpected error downloading %s: %s", url, e)
-                return None
-            finally:
-                # Rate limiting - use image-specific delay (much faster than API delay)
-                image_delay = getattr(self.settings, 'image_download_delay', self.settings.rate_limit_delay)
-                await asyncio.sleep(image_delay)
-    
-    async def download_images(self, image_urls: List[str], item_id: str, metadata: Optional[Dict[str, Any]] = None) -> List[Path]:
+    async def download_image(self, 
+                           url: str, 
+                           output_path: Path,
+                           max_retries: int = 3) -> bool:
         """
-        Download multiple images for an item
+        Download an image from URL with validation and retry logic
         
         Args:
-            image_urls: List of image URLs to download
-            item_id: The item identifier
-            metadata: Optional metadata about the item
+            url: Image URL to download
+            output_path: Local path to save the image
+            max_retries: Maximum number of retry attempts
             
         Returns:
-            List of successfully downloaded image file paths
-        """
-        if metadata is None:
-            metadata = {}
+            True if download was successful
             
-        logger.info("Downloading %d images for item: %s", len(image_urls), item_id)
+        Raises:
+            ImageDownloadError: If download fails after all retries
+        """
+        if not self.session:
+            await self.initialize_session()
         
-        # Create download tasks
-        tasks = [
-            self._download_single_image(url, item_id, metadata)
-            for url in image_urls
-        ]
-        
-        # Execute downloads concurrently
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        
-        # Filter successful downloads
-        downloaded_files = []
-        for result in results:
-            if isinstance(result, Path):
-                downloaded_files.append(result)
-            elif isinstance(result, Exception):
-                logger.error("Download task failed: %s", result)
-        
-        logger.info("Successfully downloaded %d of %d images for item: %s", 
-                   len(downloaded_files), len(image_urls), item_id)
-        
-        return downloaded_files
+        async with self._semaphore:
+            # Skip if file already exists and is valid
+            if output_path.exists() and await self._validate_existing_image(output_path):
+                logger.debug("Image already exists and is valid: %s", output_path.name)
+                return True
+            
+            # Ensure output directory exists
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            for attempt in range(max_retries):
+                try:
+                    logger.debug("Downloading image (attempt %d/%d): %s", 
+                               attempt + 1, max_retries, url)
+                    
+                    async with self.session.get(url) as response:
+                        if response.status == 200:
+                            # Download and validate image
+                            image_data = await response.read()
+                            
+                            if await self._validate_image_data(image_data):
+                                # Save image to file
+                                async with aiofiles.open(output_path, 'wb') as f:
+                                    await f.write(image_data)
+                                
+                                logger.info("Successfully downloaded: %s", output_path.name)
+                                return True
+                            else:
+                                logger.warning("Downloaded image failed validation: %s", url)
+                                
+                        elif response.status == 404:
+                            logger.warning("Image not found: %s", url)
+                            return False
+                        elif response.status == 429:
+                            # Rate limited - wait longer before retry
+                            wait_time = (2 ** attempt) * 2
+                            logger.warning("Rate limited, waiting %ds before retry", wait_time)
+                            await asyncio.sleep(wait_time)
+                            continue
+                        else:
+                            logger.warning("HTTP %d downloading %s (attempt %d/%d)", 
+                                         response.status, url, attempt + 1, max_retries)
+                
+                except asyncio.TimeoutError:
+                    logger.warning("Timeout downloading %s (attempt %d/%d)", 
+                                 url, attempt + 1, max_retries)
+                except Exception as e:
+                    logger.warning("Error downloading %s (attempt %d/%d): %s", 
+                                 url, attempt + 1, max_retries, e)
+                
+                # Wait before retry (exponential backoff)
+                if attempt < max_retries - 1:
+                    wait_time = (2 ** attempt) * self.config.rate_limit_delay
+                    await asyncio.sleep(wait_time)
+            
+            logger.error("Failed to download after %d attempts: %s", max_retries, url)
+            raise ImageDownloadError(f"Failed to download after {max_retries} attempts: {url}")
     
-    async def close(self):
-        """Close the HTTP session"""
-        if self.session and not self.session.closed:
-            await self.session.close()
-            logger.debug("Image downloader session closed")
+    async def _validate_existing_image(self, image_path: Path) -> bool:
+        """
+        Validate an existing image file
+        
+        Args:
+            image_path: Path to the image file
+            
+        Returns:
+            True if image is valid
+        """
+        try:
+            if not image_path.exists() or image_path.stat().st_size == 0:
+                return False
+            
+            # Read and validate image
+            async with aiofiles.open(image_path, 'rb') as f:
+                image_data = await f.read()
+            
+            return await self._validate_image_data(image_data)
+            
+        except Exception as e:
+            logger.debug("Error validating existing image %s: %s", image_path, e)
+            return False
+    
+    async def _validate_image_data(self, image_data: bytes) -> bool:
+        """
+        Validate image data using PIL
+        
+        Args:
+            image_data: Raw image bytes
+            
+        Returns:
+            True if image data is valid
+        """
+        try:
+            if len(image_data) < 100:  # Too small to be a valid image
+                return False
+            
+            # Use PIL to validate image
+            image = Image.open(io.BytesIO(image_data))
+            image.verify()  # Verify the image is not corrupted
+            
+            # Check minimum dimensions
+            if image.size[0] < 10 or image.size[1] < 10:
+                return False
+            
+            return True
+            
+        except Exception as e:
+            logger.debug("Image validation failed: %s", e)
+            return False
+    
+    def download_image_sync(self, url: str, output_path: Path) -> bool:
+        """
+        Synchronous wrapper for download_image (for use in threads)
+        
+        Args:
+            url: Image URL to download
+            output_path: Local path to save the image
+            
+        Returns:
+            True if download was successful
+        """
+        try:
+            import requests
+            from requests.adapters import HTTPAdapter
+            from urllib3.util.retry import Retry
+            
+            # Skip if file already exists
+            if output_path.exists() and self._validate_image_sync(output_path):
+                logger.debug("Image already exists and is valid: %s", output_path.name)
+                return True
+            
+            # Ensure output directory exists
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Configure session with retries
+            session = requests.Session()
+            retry_strategy = Retry(
+                total=3,
+                backoff_factor=1,
+                status_forcelist=[429, 500, 502, 503, 504],
+            )
+            adapter = HTTPAdapter(max_retries=retry_strategy)
+            session.mount("http://", adapter)
+            session.mount("https://", adapter)
+            
+            # Set headers
+            session.headers.update({
+                'User-Agent': self.config.user_agent,
+                'Accept': 'image/*'
+            })
+            
+            # Download image
+            response = session.get(url, timeout=self.config.request_timeout)
+            response.raise_for_status()
+            
+            # Validate image data
+            if self._validate_image_data_sync(response.content):
+                # Save to file
+                with open(output_path, 'wb') as f:
+                    f.write(response.content)
+                
+                logger.info("Successfully downloaded: %s", output_path.name)
+                return True
+            else:
+                logger.warning("Downloaded image failed validation: %s", url)
+                return False
+                
+        except Exception as e:
+            logger.error("Error in synchronous download of %s: %s", url, e)
+            return False
+    
+    def _validate_image_sync(self, image_path: Path) -> bool:
+        """
+        Synchronous image validation
+        
+        Args:
+            image_path: Path to the image file
+            
+        Returns:
+            True if image is valid
+        """
+        try:
+            if not image_path.exists() or image_path.stat().st_size == 0:
+                return False
+            
+            with open(image_path, 'rb') as f:
+                image_data = f.read()
+            
+            return self._validate_image_data_sync(image_data)
+            
+        except Exception as e:
+            logger.debug("Error validating existing image %s: %s", image_path, e)
+            return False
+    
+    def _validate_image_data_sync(self, image_data: bytes) -> bool:
+        """
+        Synchronous image data validation
+        
+        Args:
+            image_data: Raw image bytes
+            
+        Returns:
+            True if image data is valid
+        """
+        try:
+            if len(image_data) < 100:
+                return False
+            
+            image = Image.open(io.BytesIO(image_data))
+            image.verify()
+            
+            if image.size[0] < 10 or image.size[1] < 10:
+                return False
+            
+            return True
+            
+        except Exception:
+            return False
+    
+    async def download_iiif_resolutions(self, 
+                                      block_id: str, 
+                                      manuscript_id: str,
+                                      resolutions: Optional[List[str]] = None) -> Dict[str, bool]:
+        """
+        Download multiple resolutions of a IIIF image
+        
+        Args:
+            block_id: Block identifier (e.g., "0001")
+            manuscript_id: Manuscript identifier (e.g., "ms0001")
+            resolutions: List of resolutions to download (default: all)
+            
+        Returns:
+            Dictionary mapping resolutions to download success status
+        """
+        if resolutions is None:
+            resolutions = ['200', '400', '800', '1200', 'full']
+        
+        logger.info("Downloading IIIF resolutions for %s/%s: %s", 
+                   block_id, manuscript_id, resolutions)
+        
+        results = {}
+        base_url = f"https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:afc2019048_{block_id}:{manuscript_id}"
+        
+        # Create output directory
+        output_dir = self.config.output_dir / "images" / f"block_{block_id}" / manuscript_id
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Download each resolution
+        for resolution in resolutions:
+            try:
+                # Construct IIIF URL
+                if resolution == 'full':
+                    image_url = f"{base_url}/full/full/0/default.jpg"
+                else:
+                    image_url = f"{base_url}/full/{resolution},/0/default.jpg"
+                
+                # Create output path
+                filename = f"{manuscript_id}_{resolution}.jpg"
+                output_path = output_dir / filename
+                
+                # Download image
+                success = await self.download_image(image_url, output_path)
+                results[resolution] = success
+                
+                if success:
+                    logger.debug("Downloaded %s resolution for %s/%s", 
+                               resolution, block_id, manuscript_id)
+                else:
+                    logger.warning("Failed to download %s resolution for %s/%s", 
+                                 resolution, block_id, manuscript_id)
+                
+                # Rate limiting between downloads
+                await asyncio.sleep(self.config.rate_limit_delay)
+                
+            except Exception as e:
+                logger.error("Error downloading %s resolution for %s/%s: %s", 
+                           resolution, block_id, manuscript_id, e)
+                results[resolution] = False
+        
+        success_count = sum(results.values())
+        logger.info("Downloaded %d/%d resolutions for %s/%s", 
+                   success_count, len(resolutions), block_id, manuscript_id)
+        
+        return results

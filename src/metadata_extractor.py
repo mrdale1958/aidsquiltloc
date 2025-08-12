@@ -1,300 +1,194 @@
 """
 Metadata extractor for AIDS Memorial Quilt Records
-Extracts and processes metadata from LOC API responses
+Processes and normalizes metadata from Library of Congress API responses
 """
 
-import asyncio
-import json
 import logging
-from pathlib import Path
-from typing import Dict, Any, List, Optional
-from datetime import datetime
+from typing import Dict, Any, Optional, List
+from datetime import datetime, timezone
+import json
 
-import aiofiles
+from src.loc_api_client import LOCAPIClient, LOCAPISettings
+from config.settings import ScraperConfig
 
 logger = logging.getLogger(__name__)
 
 
+class MetadataExtractionError(Exception):
+    """Exception raised during metadata extraction process following error handling guidelines"""
+    pass
+
+
 class MetadataExtractor:
-    """Extracts and saves metadata from LOC collection items"""
+    """
+    Extracts and normalizes metadata from LOC API responses
     
-    def __init__(self, settings):
-        self.settings = settings
+    Handles the complex nested structure of LOC JSON responses and extracts
+    relevant information for AIDS Memorial Quilt blocks and panels following
+    project architecture patterns.
+    """
+    
+    def __init__(self, config: ScraperConfig) -> None:
+        """
+        Initialize the metadata extractor
         
-    def _extract_basic_info(self, item: Dict[str, Any]) -> Dict[str, Any]:
-        """Extract basic information from an item"""
-        return {
-            'id': item.get('id', ''),
-            'title': item.get('title', ''),
-            'url': item.get('url', ''),
-            'permalink': item.get('permalink', ''),
-            'created_date': item.get('date', ''),
-            'description': item.get('description', ''),
-            'subjects': item.get('subject', []),
-            'contributors': item.get('contributor', []),
-            'creators': item.get('creator', []),
-            'language': item.get('language', []),
-            'location': item.get('location', []),
-            'original_format': item.get('original_format', []),
-            'online_format': item.get('online_format', []),
+        Args:
+            config: Scraper configuration settings
+        """
+        self.config = config
+        self.api_client: Optional[LOCAPIClient] = None
+        
+        # Metadata field mappings per project domain knowledge
+        self.field_mappings = {
+            'title': ['title', 'item.title'],
+            'description': ['description', 'item.summary', 'summary'],
+            'date': ['date', 'item.date', 'created_published'],
+            'creator': ['creator', 'item.contributors'],
+            'subject': ['subject', 'item.subjects'],
+            'type': ['type', 'item.original_format'],
+            'identifier': ['id', 'item.id'],
+            'rights': ['rights', 'item.rights'],
+            'language': ['language', 'item.language'],
+            'location': ['location', 'repository']
         }
     
-    async def _extract_image_urls(self, item: Dict[str, Any]) -> List[str]:
-        """Extract and generate comprehensive image URLs from an item"""
-        image_urls = []
+    async def extract_item_metadata(self, item_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Extract comprehensive metadata for a specific item with error resilience
         
-        # First, get the base URL pattern from the API response
-        base_iiif_url = None
-        item_id = item.get('id', '')
-        
-        # Check for existing image URLs to extract the pattern
-        if 'image_url' in item:
-            urls = item['image_url']
-            if isinstance(urls, list) and urls:
-                # Extract base IIIF service URL from the first URL
-                first_url = urls[0]
-                if 'iiif/service:' in first_url:
-                    # Extract the base service URL up to the manuscript part
-                    # Example: https://tile.loc.gov/image-services/iiif/service:afc:afc2019048:af:c2:01:90:48:_0:00:1:afc2019048_0001:afc2019048_0001_ms0004/full/pct:6.25/0/default.jpg
-                    base_pattern = first_url.split('/full/')[0]  # Get everything before /full/
-                    if '_ms' in base_pattern:
-                        base_iiif_url = base_pattern.rsplit('_ms', 1)[0]  # Remove _msXXXX part
-        
-        # If we found a base IIIF pattern, generate URLs for available manuscript pages
-        if base_iiif_url:
-            logger.info("Generating comprehensive image URLs for item %s", item_id)
+        Args:
+            item_id: The LOC item identifier
             
-            # Dynamically discover available manuscript pages with timeout
+        Returns:
+            Normalized metadata dictionary or None if extraction fails
+            
+        Raises:
+            MetadataExtractionError: If metadata extraction fails
+        """
+        try:
+            # Initialize API client if needed per resource management practices
+            if not self.api_client:
+                self.api_client = LOCAPIClient(LOCAPISettings())
+                await self.api_client.initialize_session()
+            
+            logger.info("Extracting metadata for item: %s", item_id)
+            
+            # Get raw metadata from API with error handling
+            raw_metadata = await self.api_client.get_item_metadata(item_id)
+            
+            if not raw_metadata:
+                logger.warning("No metadata returned for item: %s", item_id)
+                return None
+            
+            # Extract and normalize metadata per project standards
+            normalized_metadata = self._normalize_metadata(raw_metadata, item_id)
+            
+            # Add extraction timestamp following documentation standards - FIXED deprecation warning
+            normalized_metadata['extracted_at'] = datetime.now(timezone.utc).isoformat()
+            normalized_metadata['source_item_id'] = item_id
+            
+            logger.info("Successfully extracted metadata for item: %s", item_id)
+            return normalized_metadata
+            
+        except Exception as e:
+            logger.error("Unexpected error extracting metadata for %s: %s", item_id, e)
+            raise MetadataExtractionError(f"Extraction error: {e}")
+    
+    def _normalize_metadata(self, raw_data: Dict[str, Any], item_id: str) -> Dict[str, Any]:
+        """
+        Normalize raw LOC metadata into a consistent structure following data validation practices
+        
+        Args:
+            raw_data: Raw metadata from LOC API
+            item_id: Item identifier for context
+            
+        Returns:
+            Normalized metadata dictionary
+        """
+        normalized = {
+            'item_id': item_id,
+            'raw_metadata': raw_data  # Keep original for reference per archival practices
+        }
+        
+        # Extract item-level metadata following domain knowledge
+        item_data = raw_data.get('item', {})
+        
+        # Map standard fields using field mappings per configuration management
+        for field, possible_keys in self.field_mappings.items():
+            value = self._extract_field_value(raw_data, item_data, possible_keys)
+            if value:
+                normalized[field] = value
+        
+        return normalized
+    
+    def _extract_field_value(self, 
+                           raw_data: Dict[str, Any], 
+                           item_data: Dict[str, Any], 
+                           possible_keys: List[str]) -> Optional[Any]:
+        """
+        Extract field value from multiple possible locations in metadata
+        
+        Args:
+            raw_data: Top-level raw metadata
+            item_data: Item-specific metadata
+            possible_keys: List of possible field names to check
+            
+        Returns:
+            Extracted field value or None
+        """
+        for key in possible_keys:
+            # Check item-level data first per API structure knowledge
+            if '.' in key:
+                # Handle nested keys like 'item.title'
+                parts = key.split('.')
+                current = raw_data
+                for part in parts:
+                    if isinstance(current, dict) and part in current:
+                        current = current[part]
+                    else:
+                        current = None
+                        break
+                if current:
+                    return self._clean_field_value(current)
+            else:
+                # Check both item_data and raw_data
+                if key in item_data:
+                    return self._clean_field_value(item_data[key])
+                elif key in raw_data:
+                    return self._clean_field_value(raw_data[key])
+        
+        return None
+    
+    def _clean_field_value(self, value: Any) -> Any:
+        """
+        Clean and normalize field values following data validation practices
+        
+        Args:
+            value: Raw field value
+            
+        Returns:
+            Cleaned field value
+        """
+        if isinstance(value, list):
+            if len(value) == 1:
+                return self._clean_field_value(value[0])
+            else:
+                return [self._clean_field_value(v) for v in value if v]
+        elif isinstance(value, str):
+            return value.strip()
+        else:
+            return value
+    
+    async def close(self) -> None:
+        """Clean up resources following proper resource management and error resilience"""
+        if self.api_client:
             try:
-                available_manuscripts = await asyncio.wait_for(
-                    self._discover_manuscripts(base_iiif_url), 
-                    timeout=30.0  # Max 30 seconds for discovery
-                )
-            except asyncio.TimeoutError:
-                logger.warning("Manuscript discovery timed out for %s, using fallback", item_id)
-                available_manuscripts = [f"ms{i:04d}" for i in range(1, 57)]
-            
-            if available_manuscripts:
-                resolutions = ['pct:6.25', 'pct:12.5', 'pct:25', 'pct:50', 'pct:100']
-                formats = ['jpg']  # Use JPG format only (JP2 causes 500 errors)
-                
-                for ms_id in available_manuscripts:
-                    ms_iiif_base = f"{base_iiif_url}_{ms_id}"
-                    
-                    for resolution in resolutions:
-                        for fmt in formats:
-                            # Generate IIIF URL: /full/{resolution}/0/default.{format}
-                            iiif_url = f"{ms_iiif_base}/full/{resolution}/0/default.{fmt}"
-                            image_urls.append(iiif_url)
-                
-                logger.info("Generated %d IIIF URLs for %s (%d manuscripts)", 
-                           len(image_urls), item_id, len(available_manuscripts))
-            else:
-                logger.warning("No manuscript pages discovered for %s", item_id)
-        
-        else:
-            # Fallback: use original extraction method
-            logger.warning("Could not extract IIIF pattern for %s, using fallback method", item_id)
-            
-            # Check for image URLs in various fields
-            if 'image_url' in item:
-                urls = item['image_url']
-                if isinstance(urls, str):
-                    image_urls.append(urls)
-                elif isinstance(urls, list):
-                    image_urls.extend(urls)
-            
-            # Check for resources with image links
-            if 'resources' in item:
-                for resource in item.get('resources', []):
-                    if isinstance(resource, dict):
-                        # Look for image files in resource
-                        for key, value in resource.items():
-                            if 'image' in key.lower() and isinstance(value, str):
-                                if any(ext in value.lower() for ext in ['.jpg', '.jpeg', '.png', '.tiff', '.tif']):
-                                    image_urls.append(value)
-            
-            # Check for thumbnail or preview images
-            for field in ['thumbnail', 'preview', 'image']:
-                if field in item:
-                    value = item[field]
-                    if isinstance(value, str) and value.startswith('http'):
-                        image_urls.append(value)
-                    elif isinstance(value, list):
-                        image_urls.extend([url for url in value if isinstance(url, str) and url.startswith('http')])
-        
-        # Remove duplicates while preserving order
-        seen = set()
-        unique_urls = []
-        for url in image_urls:
-            if url not in seen:
-                seen.add(url)
-                unique_urls.append(url)
-        
-        return unique_urls
-    
-    async def _discover_manuscripts(self, base_iiif_url: str) -> List[str]:
-        """Discover available manuscript pages for a quilt block"""
-        import aiohttp
-        
-        available = []
-        timeout = aiohttp.ClientTimeout(total=10)  # Shorter timeout for faster discovery
-        
-        async with aiohttp.ClientSession(timeout=timeout) as session:
-            # Check manuscript pages with limited range and faster timeouts
-            semaphore = asyncio.Semaphore(3)  # Limit concurrent checks
-            
-            async def check_manuscript(ms_num):
-                async with semaphore:
-                    ms_id = f"ms{ms_num:04d}"
-                    # Test actual image availability instead of just info.json
-                    test_url = f"{base_iiif_url}_{ms_id}/full/pct:6.25/0/default.jpg"
-                    
-                    try:
-                        async with session.head(test_url) as response:
-                            if response.status == 200:
-                                return ms_id
-                            return None
-                    except Exception:
-                        return None
-            
-            # Check first 60 manuscripts concurrently (covers most blocks)
-            tasks = [check_manuscript(i) for i in range(1, 61)]
-            results = await asyncio.gather(*tasks, return_exceptions=True)
-            
-            # Collect successful results
-            for result in results:
-                if isinstance(result, str):  # Valid manuscript ID
-                    available.append(result)
-        
-        if not available:
-            logger.warning("No manuscripts discovered, falling back to minimal default: ms0001")
-            # Conservative fallback - just try ms0001 if discovery fails
-            available = ["ms0001"]
-        
-        logger.info("Discovered %d manuscripts: %s to %s", 
-                   len(available), available[0] if available else "None", 
-                   available[-1] if available else "None")
-        
-        return available
-    
-    def _extract_relationships(self, item: Dict[str, Any]) -> Dict[str, Any]:
-        """Extract relationship information"""
-        return {
-            'is_part_of': item.get('is_part_of', []),
-            'related_items': item.get('related_items', []),
-            'collection': item.get('collection', {}),
-            'series': item.get('series', []),
-        }
-    
-    def _extract_technical_metadata(self, item: Dict[str, Any]) -> Dict[str, Any]:
-        """Extract technical metadata"""
-        return {
-            'file_size': item.get('file_size', ''),
-            'dimensions': item.get('dimensions', ''),
-            'color': item.get('color', ''),
-            'medium': item.get('medium', []),
-            'digital_id': item.get('digital_id', ''),
-            'call_number': item.get('call_number', []),
-            'reproduction_number': item.get('reproduction_number', ''),
-        }
-    
-    def _extract_rights_info(self, item: Dict[str, Any]) -> Dict[str, Any]:
-        """Extract rights and access information"""
-        return {
-            'rights': item.get('rights', ''),
-            'access_restricted': item.get('access_restricted', False),
-            'usage_rights': item.get('usage_rights', ''),
-            'rights_holder': item.get('rights_holder', ''),
-        }
-    
-    async def extract_metadata(self, item: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Extract comprehensive metadata from a collection item
-        
-        Args:
-            item: The item data from LOC API
-            
-        Returns:
-            Processed metadata dictionary
-        """
-        metadata = {
-            'extraction_timestamp': datetime.now().isoformat(),
-            'source': 'Library of Congress AIDS Memorial Quilt Records',
-            'api_version': 'v1',
-        }
-        
-        # Extract different types of metadata
-        metadata.update(self._extract_basic_info(item))
-        metadata['image_urls'] = await self._extract_image_urls(item)
-        metadata['relationships'] = self._extract_relationships(item)
-        metadata['technical'] = self._extract_technical_metadata(item)
-        metadata['rights'] = self._extract_rights_info(item)
-        
-        # Add raw data for completeness
-        metadata['raw_data'] = item
-        
-        logger.info("Extracted metadata for item: %s", metadata.get('id', 'Unknown'))
-        
-        return metadata
-    
-    async def save_metadata(self, metadata: Dict[str, Any]) -> Path:
-        """
-        Save metadata to file
-        
-        Args:
-            metadata: The metadata dictionary to save
-            
-        Returns:
-            Path to the saved metadata file
-        """
-        item_id = metadata.get('id', 'unknown')
-        
-        # Extract clean ID from URL if it's a full URL
-        if item_id.startswith('http'):
-            # Extract ID from URL: http://www.loc.gov/item/afc2019048_0001/ -> afc2019048_0001
-            import re
-            match = re.search(r'/item/([^/]+)/?', item_id)
-            if match:
-                item_id = match.group(1)
-            else:
-                # Fallback: use the last part of the URL
-                item_id = item_id.rstrip('/').split('/')[-1]
-        
-        if self.settings.metadata_format.lower() == 'json':
-            filename = f"{item_id}_metadata.json"
-            filepath = self.settings.metadata_dir / filename
-            
-            async with aiofiles.open(filepath, 'w', encoding='utf-8') as f:
-                await f.write(json.dumps(metadata, indent=2, ensure_ascii=False))
-                
-        else:
-            # CSV format (simplified)
-            filename = f"{item_id}_metadata.csv"
-            filepath = self.settings.metadata_dir / filename
-            
-            # Flatten metadata for CSV
-            flattened = self._flatten_dict(metadata)
-            
-            async with aiofiles.open(filepath, 'w', encoding='utf-8') as f:
-                # Write header
-                await f.write(','.join(flattened.keys()) + '\n')
-                # Write data
-                await f.write(','.join(str(v) for v in flattened.values()) + '\n')
-        
-        logger.info("Saved metadata to: %s", filename)
-        return filepath
-    
-    def _flatten_dict(self, d: Dict[str, Any], parent_key: str = '', sep: str = '_') -> Dict[str, Any]:
-        """Flatten nested dictionary for CSV export"""
-        items = []
-        for k, v in d.items():
-            new_key = f"{parent_key}{sep}{k}" if parent_key else k
-            if isinstance(v, dict):
-                items.extend(self._flatten_dict(v, new_key, sep=sep).items())
-            elif isinstance(v, list):
-                # Convert lists to string representation
-                items.append((new_key, '; '.join(str(item) for item in v)))
-            else:
-                items.append((new_key, v))
-        return dict(items)
+                await self.api_client.close_session()
+                self.api_client = None
+                logger.debug("Metadata extractor resources cleaned up")
+            except Exception as e:
+                logger.warning("Error during metadata extractor cleanup: %s", e)
+
+
+# Export classes following project naming conventions
+__all__ = ['MetadataExtractor', 'MetadataExtractionError']
