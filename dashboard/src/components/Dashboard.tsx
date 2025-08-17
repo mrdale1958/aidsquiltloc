@@ -24,20 +24,20 @@ import RecordDetail from './RecordDetail';
 import { QuiltRecord, Stats } from '../types/api';
 import { apiService } from '../services/apiService';
 
-interface TabPanelProps {
+interface TabArtifactProps {
   children?: React.ReactNode;
   index: number;
   value: number;
 }
 
-function TabPanel(props: TabPanelProps) {
+function TabArtifact(props: TabArtifactProps) {
   const { children, value, index, ...other } = props;
 
   return (
     <div
-      role="tabpanel"
+      role="tabartifact"
       hidden={value !== index}
-      id={`dashboard-tabpanel-${index}`}
+      id={`dashboard-tabartifact-${index}`}
       aria-labelledby={`dashboard-tab-${index}`}
       {...other}
     >
@@ -49,7 +49,7 @@ function TabPanel(props: TabPanelProps) {
 function a11yProps(index: number) {
   return {
     id: `dashboard-tab-${index}`,
-    'aria-controls': `dashboard-tabpanel-${index}`,
+    'aria-controls': `dashboard-tabartifact-${index}`,
   };
 }
 
@@ -125,7 +125,7 @@ const Dashboard: React.FC = () => {
       // This allows us to use the existing StatsOverview component
       const fallbackStats = {
         total_blocks: totalRecords || 0,
-        total_panels: Math.round((totalRecords || 0) * 2.9), // Estimated based on typical ratios
+        total_artifacts: Math.round((totalRecords || 0) * 2.9), // Estimated based on typical ratios
         blocks_with_images: 0, // Unknown without API
         recent_blocks: totalRecords || 0, // Assume all are recent without date filtering
         database_size_bytes: 0, // Unknown without API
@@ -215,15 +215,16 @@ const Dashboard: React.FC = () => {
    * Implements efficient page navigation with LOC API integration
    */
   const handlePageChange = useCallback(async (newPage: number): Promise<void> => {
-    if (newPage === currentPage) return;
-    
+    if (newPage === page) return;
+
+    setPage(newPage); // <-- Add this line to update the page state
     setLoading(true);
     try {
       await loadRecords(newPage);
     } finally {
       setLoading(false);
     }
-  }, [currentPage, loadRecords]);
+  }, [page, loadRecords]);
 
   /**
    * Initialize AIDS Memorial Quilt dashboard data
@@ -307,7 +308,7 @@ const Dashboard: React.FC = () => {
    */
   const handleRecordSelect = (record: QuiltRecord): void => {
     setSelectedRecord(record);
-    console.log(`AIDS Memorial Quilt Dashboard: Selected record ${record.item_id} - ${record.title}`);
+    console.log(`AIDS Memorial Quilt Dashboard: Selected record ${record.block_id} - ${record.title}`);
   };
 
   /**
@@ -470,7 +471,7 @@ const Dashboard: React.FC = () => {
         </Box>
 
         {/* AIDS Memorial Quilt Overview Tab - Statistics and Analytics */}
-        <TabPanel value={tabValue} index={0}>
+        <TabArtifact value={tabValue} index={0}>
           <Fade in={tabValue === 0}>
             <div>
               {stats ? (
@@ -511,10 +512,10 @@ const Dashboard: React.FC = () => {
               )}
             </div>
           </Fade>
-        </TabPanel>
+        </TabArtifact>
 
         {/* AIDS Memorial Quilt Records Tab - Searchable Data Table */}
-        <TabPanel value={tabValue} index={1}>
+        <TabArtifact value={tabValue} index={1}>
           <Fade in={tabValue === 1}>
             <div>
               <Box
@@ -542,7 +543,7 @@ const Dashboard: React.FC = () => {
               </Box>
             </div>
           </Fade>
-        </TabPanel>
+        </TabArtifact>
       </Card>
     </Container>
   );

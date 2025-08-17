@@ -170,8 +170,8 @@ class SchemaAnalyzer:
         
         # Map desired columns to available columns
         column_mapping = {
-            'id': self._find_best_column(available_columns, ['id', 'block_id', 'panel_id', 'item_id']),
-            'item_id': self._find_best_column(available_columns, ['item_id', 'block_id', 'panel_id', 'id']),
+            'id': self._find_best_column(available_columns, ['id', 'block_id', 'artifact_id', 'item_id']),
+            'item_id': self._find_best_column(available_columns, ['item_id', 'block_id', 'artifact_id', 'id']),
             'title': self._find_best_column(available_columns, ['title', 'name', 'description']),
             'description': self._find_best_column(available_columns, ['description', 'title', 'summary']),
             'subjects': self._find_best_column(available_columns, ['subjects', 'tags', 'keywords']),

@@ -23,7 +23,7 @@ import time
 from src.loc_api_client import LOCAPIClient, LOCAPISettings
 from src.metadata_extractor import MetadataExtractor
 from src.image_downloader import ImageDownloader
-from src.database import DatabaseManager, QuiltBlock, QuiltPanel
+from src.database import DatabaseManager, QuiltBlock, QuiltArtifact
 from config.settings import ScraperConfig
 
 # Configure structured logging per project standards
@@ -231,7 +231,7 @@ class IntegratedAIDSQuiltScraper:
                 description=block_description,
                 created_date=created_date,
                 metadata_json=json.dumps(metadata),
-                total_panels=len(manuscripts),
+                total_artifacts=len(manuscripts),
                 scraped_at=datetime.now(timezone.utc)
             )
             
@@ -250,18 +250,20 @@ class IntegratedAIDSQuiltScraper:
                     self.stats['database_errors'] += 1
                     return False
             
-            # Create panel records for each manuscript with proper JSON serialization
+            # Create artifact records for each manuscript with proper JSON serialization
             for manuscript_id in manuscripts:
                 try:
                     # Fix: Convert image URLs list to JSON string for database storage
                     image_urls_list = self._generate_image_urls(block_id, manuscript_id)
                     image_urls_json = json.dumps(image_urls_list)
                     
-                    panel = QuiltPanel(
+                    # Use block_id/manuscript_id pattern for artifact ID
+                    artifact_id = f"{block_id}/{manuscript_id}"
+                    artifact = QuiltArtifact(
                         block_id=block_id,
-                        panel_id=manuscript_id,
-                        title=f"Panel {manuscript_id}",
-                        description=f"AIDS Memorial Quilt panel {manuscript_id} from block {block_id}",
+                        artifact_id=artifact_id,
+                        title=f"Artifact {manuscript_id}",
+                        description=f"AIDS Memorial Quilt artifact {manuscript_id} from block {block_id}",
                         image_urls=image_urls_json,  # Store as JSON string, not list
                         metadata_json=json.dumps({
                             'manuscript_id': manuscript_id,
@@ -272,17 +274,17 @@ class IntegratedAIDSQuiltScraper:
                         scraped_at=datetime.now(timezone.utc)
                     )
                     
-                    panel_saved = await self.db_manager.save_panel(panel)
-                    if panel_saved:
+                    artifact_saved = await self.db_manager.save_artifact(artifact)
+                    if artifact_saved:
                         self.stats['database_records_created'] += 1
                     else:
                         self.stats['database_records_updated'] += 1
                         
                 except Exception as e:
-                    logger.error("Error saving panel %s/%s to database: %s", block_id, manuscript_id, e)
+                    logger.error("Error saving artifact %s/%s to database: %s", block_id, manuscript_id, e)
                     self.stats['database_errors'] += 1
             
-            logger.info("Successfully stored metadata for block %s with %d panels", block_id, len(manuscripts))
+            logger.info("Successfully stored metadata for block %s with %d artifacts", block_id, len(manuscripts))
             return True
             
         except Exception as e:
@@ -1111,8 +1113,6 @@ Examples:
             ScraperOperationModes.IMAGES_ONLY,
             ScraperOperationModes.DATABASE_SYNC
         ],
-        default=ScraperOperationModes.FULL,
-        help='Scraper operation mode (default: full)'
     )
     parser.add_argument(
         '--config',

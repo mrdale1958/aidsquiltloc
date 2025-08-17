@@ -54,7 +54,7 @@ class QuiltDatabasePatcher:
         
         compatibility_report = {
             "quilt_blocks": {"exists": False, "columns": [], "issues": []},
-            "quilt_panels": {"exists": False, "columns": [], "issues": []},
+            "quilt_artifacts": {"exists": False, "columns": [], "issues": []},
             "collection_items": {"exists": False, "columns": [], "issues": []},
             "recommended_primary_table": None,
             "corrected_queries": {}
@@ -63,7 +63,7 @@ class QuiltDatabasePatcher:
         try:
             async with aiosqlite.connect(str(self.database_path)) as conn:
                 # Analyze each relevant table
-                for table_name in ["quilt_blocks", "quilt_panels", "collection_items"]:
+                for table_name in ["quilt_blocks", "quilt_artifacts", "collection_items"]:
                     try:
                         # Check if table exists and get schema
                         cursor = await conn.execute(f"PRAGMA table_info({table_name})")
@@ -131,7 +131,7 @@ class QuiltDatabasePatcher:
             "created_at", "updated_at"
         ]
         
-        for table_name in ["quilt_blocks", "quilt_panels", "collection_items"]:
+        for table_name in ["quilt_blocks", "quilt_artifacts", "collection_items"]:
             table_info = compatibility_report.get(table_name, {})
             if not table_info.get("exists", False):
                 continue
@@ -195,16 +195,16 @@ class QuiltDatabasePatcher:
                 "created_at": self._find_column(available_columns, ["scraped_at", "created_date"]),
                 "updated_at": self._find_column(available_columns, ["updated_at", "scraped_at"])
             }
-        elif table_name == "quilt_panels":
+        elif table_name == "quilt_artifacts":
             mappings = {
-                "id": self._find_column(available_columns, ["id", "panel_id"]),
-                "item_id": self._find_column(available_columns, ["panel_id", "block_id", "id"]),
+                "id": self._find_column(available_columns, ["id", "artifact_id"]),
+                "item_id": self._find_column(available_columns, ["artifact_id", "block_id", "id"]),
                 "title": self._find_column(available_columns, ["title"]),
                 "description": self._find_column(available_columns, ["description"]),
                 "subjects": self._find_column(available_columns, ["metadata_json", "subjects"]),
                 "names": self._find_column(available_columns, ["metadata_json", "names"]),
                 "dates": self._find_column(available_columns, ["scraped_at", "updated_at"]),
-                "url": self._find_column(available_columns, ["image_urls"]),  # Panel URLs often in image_urls
+                "url": self._find_column(available_columns, ["image_urls"]),  # Artifact URLs often in image_urls
                 "image_url": self._find_column(available_columns, ["image_urls"]),
                 "content_hash": "NULL",
                 "created_at": self._find_column(available_columns, ["scraped_at"]),
@@ -328,7 +328,7 @@ async def patch_database_compatibility() -> None:
         print(f"✅ Recommended primary table: {recommended_table}")
         
         # Show table analysis
-        for table_name in ["collection_items", "quilt_blocks", "quilt_panels"]:
+        for table_name in ["collection_items", "quilt_blocks", "quilt_artifacts"]:
             table_info = compatibility_report.get(table_name, {})
             if table_info.get("exists", False):
                 row_count = table_info.get("row_count", 0)
@@ -424,7 +424,7 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
                 else:
                     record[json_field] = []
             
-            # Handle image_urls field for panels
+            # Handle image_urls field for artifacts
             if "image_urls" in record.get("url", "") or "image_urls" in record.get("image_url", ""):
                 try:
                     # Parse image_urls JSON array

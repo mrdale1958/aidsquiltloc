@@ -5,8 +5,7 @@
  */
 
 export interface QuiltRecord {
-  id: number;
-  item_id: string;
+  block_id: string; 
   title: string;
   description?: string;
   subjects?: string[];
@@ -18,11 +17,11 @@ export interface QuiltRecord {
   content_hash: string;
   created_at: string;
   updated_at?: string;
-  panels?: QuiltPanel[];
+  artifacts?: QuiltArtifact[];
 }
 
-export interface QuiltPanel {
-  panel_id: string;
+export interface QuiltArtifact {
+  artifact_id: string;
   block_id: string;
   title: string;
   description?: string;
@@ -37,7 +36,7 @@ export interface QuiltBlock {
   title: string;
   description?: string;
   created_date?: string;
-  total_panels: number;
+  total_artifacts: number;
   scraped_at?: string;
   updated_at?: string;
   metadata?: Record<string, any>;
@@ -49,7 +48,7 @@ export interface QuiltBlock {
  */
 export interface Stats {
   total_blocks: number;
-  total_panels: number;
+  total_artifacts: number;
   blocks_with_images: number;
   recent_blocks: number;
   database_size_bytes: number;

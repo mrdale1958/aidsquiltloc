@@ -34,7 +34,7 @@ def apply_database_schema_fix() -> None:
         
         # Find the problematic SQL query in get_records method
         # The error shows it's around line 270, looking for metadata column
-        problematic_pattern = r'SELECT block_id, title, description, created_date, total_panels,\s*metadata,\s*scraped_at, updated_at'
+        problematic_pattern = r'SELECT block_id, title, description, created_date, total_artifacts,\s*metadata,\s*scraped_at, updated_at'
         
         if re.search(problematic_pattern, content):
             print("✅ Found problematic SQL query with 'metadata' column")
@@ -103,7 +103,7 @@ def apply_database_schema_fix() -> None:
             
             # Determine which table to use for primary data source
             table_counts = {}
-            for table_name in ["collection_items", "quilt_blocks", "quilt_panels"]:
+            for table_name in ["collection_items", "quilt_blocks", "quilt_artifacts"]:
                 try:
                     cursor = await self.connection.execute(f"SELECT COUNT(*) FROM {table_name}")
                     result = await cursor.fetchone()
@@ -115,10 +115,10 @@ def apply_database_schema_fix() -> None:
             # Choose primary table based on data availability
             if table_counts.get("collection_items", 0) > 0:
                 primary_table = "collection_items"
-            elif table_counts.get("quilt_blocks", 0) >= table_counts.get("quilt_panels", 0):
+            elif table_counts.get("quilt_blocks", 0) >= table_counts.get("quilt_artifacts", 0):
                 primary_table = "quilt_blocks"
             else:
-                primary_table = "quilt_panels"
+                primary_table = "quilt_artifacts"
             
             logger.info(f"AIDS Memorial Quilt Database: Attempting to fetch records from {primary_table} (limit: {limit}, offset: {offset})")
             
@@ -157,9 +157,9 @@ def apply_database_schema_fix() -> None:
                     ORDER BY id DESC
                     LIMIT ? OFFSET ?
                 """, (limit, offset))
-            else:  # quilt_panels
+            else:  # quilt_artifacts
                 cursor = await self.connection.execute("""
-                    SELECT id, panel_id as item_id, title, description,
+                    SELECT id, artifact_id as item_id, title, description,
                            CASE 
                                WHEN metadata_json IS NOT NULL AND metadata_json != '{}' 
                                THEN json_extract(metadata_json, '$.subjects')
@@ -173,7 +173,7 @@ def apply_database_schema_fix() -> None:
                            scraped_at as dates,
                            image_urls as url, image_urls as image_url, NULL as content_hash,
                            scraped_at as created_at, updated_at
-                    FROM quilt_panels
+                    FROM quilt_artifacts
                     ORDER BY id DESC
                     LIMIT ? OFFSET ?
                 """, (limit, offset))

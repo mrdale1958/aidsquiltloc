@@ -34,8 +34,8 @@ def analyze_database_module() -> None:
         problematic_lines = []
         
         for i, line in enumerate(lines, 1):
-            # Look for QuiltBlock or QuiltPanel imports
-            if ('QuiltBlock' in line or 'QuiltPanel' in line) and ('import' in line or 'from' in line):
+            # Look for QuiltBlock or QuiltArtifact imports
+            if ('QuiltBlock' in line or 'QuiltArtifact' in line) and ('import' in line or 'from' in line):
                 problematic_lines.append((i, line.strip()))
         
         if problematic_lines:
@@ -48,7 +48,7 @@ def analyze_database_module() -> None:
         # Check for class definitions that might be causing issues
         class_definitions = []
         for i, line in enumerate(lines, 1):
-            if line.strip().startswith('class ') and ('QuiltBlock' in line or 'QuiltPanel' in line):
+            if line.strip().startswith('class ') and ('QuiltBlock' in line or 'QuiltArtifact' in line):
                 class_definitions.append((i, line.strip()))
         
         if class_definitions:
@@ -151,7 +151,7 @@ def suggest_database_fix() -> None:
     print(f"\n💡 Suggested Fixes for Database Module")
     print("=" * 38)
     
-    print("1. 🔧 Remove any imports of QuiltBlock/QuiltPanel from database.py")
+    print("1. 🔧 Remove any imports of QuiltBlock/QuiltArtifact from database.py")
     print("   - These should be TypeScript interfaces in dashboard/src/types/api.ts")
     print("   - Not Python classes in the database module")
     
@@ -188,4 +188,4 @@ if __name__ == "__main__":
     print("1. Run: python minimal_import_test.py")
     print("2. Check the output to see exactly which import fails")
     print("3. Edit src/database.py to remove problematic imports")
-    print("4. Ensure QuiltBlock/QuiltPanel are only in TypeScript files")
+    print("4. Ensure QuiltBlock/QuiltArtifact are only in TypeScript files")

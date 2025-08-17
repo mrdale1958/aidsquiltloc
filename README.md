@@ -190,7 +190,7 @@ CREATE TABLE quilt_records (
     location VARCHAR(500),
     quilt_block_number VARCHAR(20),
     memorial_names TEXT,       -- JSON array of memorial names
-    panel_maker VARCHAR(500),
+    artifact_maker VARCHAR(500),
     image_urls TEXT,          -- JSON array of image URLs
     content_hash VARCHAR(64), -- Change detection
     first_seen DATETIME,

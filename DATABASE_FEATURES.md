@@ -54,7 +54,7 @@ The system stores detailed information for each AIDS Memorial Quilt record:
 ### Quilt-Specific Fields
 - `quilt_block_number`: Extracted block number
 - `memorial_names`: Names being memorialized (JSON array)
-- `panel_maker`: Panel creator information
+- `artifact_maker`: Artifact creator information
 
 ### Resource Tracking
 - `image_urls`: Available image URLs (JSON array)

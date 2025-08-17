@@ -9,7 +9,7 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
     """
     Get AIDS Memorial Quilt records with pagination (PATCHED VERSION)
     Implements error resilience and digital humanities research standards
-    Addresses schema compatibility for quilt_panels table
+    Addresses schema compatibility for quilt_artifacts table
     
     Args:
         limit: Maximum number of records to return (1-1000)
@@ -32,9 +32,9 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
         if offset < 0:
             raise DataValidationError("Offset must be non-negative")
         
-        # Use schema-corrected query for quilt_panels table
-        query = """SELECT id, panel_id as item_id, title, description, json_extract(metadata_json, '$.subjects') as subjects, json_extract(metadata_json, '$.names') as names, scraped_at as dates, image_urls as url, image_urls as image_url, NULL as content_hash, scraped_at as created_at, updated_at
-            FROM quilt_panels
+        # Use schema-corrected query for quilt_artifacts table
+        query = """SELECT id, artifact_id as item_id, title, description, json_extract(metadata_json, '$.subjects') as subjects, json_extract(metadata_json, '$.names') as names, scraped_at as dates, image_urls as url, image_urls as image_url, NULL as content_hash, scraped_at as created_at, updated_at
+            FROM quilt_artifacts
             ORDER BY updated_at DESC
             LIMIT ? OFFSET ?"""
         
@@ -72,7 +72,7 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
                 else:
                     record[json_field] = []
             
-            # Handle image_urls field for AIDS Memorial Quilt panels
+            # Handle image_urls field for AIDS Memorial Quilt artifacts
             if record.get("url") or record.get("image_url"):
                 for url_field in ["url", "image_url"]:
                     url_value = record.get(url_field)
@@ -102,7 +102,7 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
             
             records.append(record)
         
-        logger.info(f"AIDS Memorial Quilt DB: Retrieved {len(records)} records from quilt_panels")
+        logger.info(f"AIDS Memorial Quilt DB: Retrieved {len(records)} records from quilt_artifacts")
         return records
         
     except (DatabaseConnectionError, DataValidationError):
@@ -122,7 +122,7 @@ async def _determine_primary_data_source(self) -> str:
     """
     try:
         # Check table row counts to determine best data source
-        tables_to_check = ["collection_items", "quilt_blocks", "quilt_panels"]
+        tables_to_check = ["collection_items", "quilt_blocks", "quilt_artifacts"]
         table_stats = {}
         
         for table_name in tables_to_check:

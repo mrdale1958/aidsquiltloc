@@ -18,9 +18,9 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
         if not self.connection:
             raise DatabaseConnectionError("Database not initialized")
         
-        # Use corrected query for quilt_panels table
-        query = """SELECT id, panel_id as item_id, title, description, metadata_json as subjects, metadata_json as names, scraped_at as dates, image_urls as url, image_urls as image_url, NULL as content_hash, scraped_at as created_at, updated_at
-                FROM quilt_panels
+        # Use corrected query for quilt_artifacts table
+        query = """SELECT id, artifact_id as item_id, title, description, metadata_json as subjects, metadata_json as names, scraped_at as dates, image_urls as url, image_urls as image_url, NULL as content_hash, scraped_at as created_at, updated_at
+                FROM quilt_artifacts
                 ORDER BY updated_at DESC
                 LIMIT ? OFFSET ?"""
         
@@ -52,7 +52,7 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
                 else:
                     record[json_field] = []
             
-            # Handle image_urls field for panels
+            # Handle image_urls field for artifacts
             if "image_urls" in record.get("url", "") or "image_urls" in record.get("image_url", ""):
                 try:
                     # Parse image_urls JSON array
@@ -67,7 +67,7 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
             
             records.append(record)
         
-        logger.info(f"AIDS Memorial Quilt DB: Retrieved {len(records)} records from quilt_panels")
+        logger.info(f"AIDS Memorial Quilt DB: Retrieved {len(records)} records from quilt_artifacts")
         return records
         
     except Exception as e:

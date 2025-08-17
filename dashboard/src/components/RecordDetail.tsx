@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -12,6 +12,11 @@ import {
   ListItem,
   ListItemText,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  CircularProgress,
 } from '@mui/material';
 import {
   Close as CloseIcon,
@@ -27,6 +32,15 @@ import { QuiltRecord } from '../types/api';
 interface RecordDetailProps {
   record: QuiltRecord;
   onClose: () => void;
+}
+
+interface Artifact {
+  artifact_id: string;
+  title: string;
+  description?: string;
+  image_urls?: string[];
+  metadata?: Record<string, any>;
+  [key: string]: any; // For any extra fields
 }
 
 const RecordDetail: React.FC<RecordDetailProps> = ({ record, onClose }) => {
@@ -48,6 +62,34 @@ const RecordDetail: React.FC<RecordDetailProps> = ({ record, onClose }) => {
       window.open(record.image_url, '_blank');
     }
   };
+
+  // State for artifact popup
+  const [selectedArtifact, setSelectedArtifact] = useState<Artifact | null>(null);
+
+  // State for fetched artifacts
+  const [artifacts, setArtifacts] = useState<Artifact[]>([]);
+  const [artifactsLoading, setArtifactsLoading] = useState<boolean>(false);
+
+  // Fetch artifacts for this block_id when component mounts or record changes
+  useEffect(() => {
+    let isMounted = true;
+    const fetchArtifacts = async () => {
+      setArtifactsLoading(true);
+      try {
+        console.log('Fetching artifacts...', record.block_id);
+        const resp = await fetch(`/api/artifacts?block_id=${encodeURIComponent(record.block_id)}`);
+        const data = await resp.json();
+        console.log('Fetched artifacts:', data);
+        setArtifacts(data.artifacts || data || []);
+      } catch (err) {
+        if (isMounted) setArtifacts([]);
+      } finally {
+        if (isMounted) setArtifactsLoading(false);
+      }
+    };
+    fetchArtifacts();
+    return () => { isMounted = false; };
+  }, [record.block_id]);
 
   return (
     <Card sx={{ height: 'fit-content', maxHeight: '80vh', overflow: 'auto' }}>
@@ -97,7 +139,7 @@ const RecordDetail: React.FC<RecordDetailProps> = ({ record, onClose }) => {
         {/* Item ID */}
         <Box display="flex" alignItems="center" mb={2}>
           <Typography variant="body2" color="text.secondary">
-            Item ID: {record.item_id}
+            Item ID: {record.block_id}
           </Typography>
         </Box>
 
@@ -230,6 +272,118 @@ const RecordDetail: React.FC<RecordDetailProps> = ({ record, onClose }) => {
           >
             View in Library of Congress
           </Button>
+        </Box>
+
+        {/* Artifacts Section (fetched by block_id) */}
+        <Box mb={3}>
+          <Typography variant="subtitle2" fontWeight="bold" mb={1}>
+            Associated Artifacts
+          </Typography>
+          {artifactsLoading ? (
+            <CircularProgress size={24} />
+          ) : artifacts.length > 0 ? (
+            <Box display="flex" gap={1} flexWrap="wrap">
+              {artifacts.map((artifact) => (
+                <Chip
+                  key={artifact.artifact_id}
+                  label={artifact.title || artifact.artifact_id}
+                  onClick={() => setSelectedArtifact(artifact)}
+                  color="info"
+                  variant="outlined"
+                  sx={{ cursor: 'pointer' }}
+                />
+              ))}
+            </Box>
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              No artifacts found for this block.
+            </Typography>
+          )}
+        </Box>
+
+        {/* Artifact Detail Dialog */}
+        <Dialog
+          open={!!selectedArtifact}
+          onClose={() => setSelectedArtifact(null)}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle>
+            Artifact Details
+          </DialogTitle>
+          <DialogContent dividers>
+            {selectedArtifact && (
+              <>
+                <Typography variant="h6" gutterBottom>
+                  {selectedArtifact.title}
+                </Typography>
+                {selectedArtifact.image_urls && selectedArtifact.image_urls.length > 0 && (
+                  <Box mb={2}>
+                    <CardMedia
+                      component="img"
+                      image={selectedArtifact.image_urls[0]}
+                      alt={selectedArtifact.title}
+                      sx={{
+                        width: '100%',
+                        height: 200,
+                        objectFit: 'cover',
+                        borderRadius: 1,
+                        mb: 1,
+                      }}
+                    />
+                  </Box>
+                )}
+                {selectedArtifact.description && (
+                  <Typography variant="body2" mb={2}>
+                    {selectedArtifact.description}
+                  </Typography>
+                )}
+                {selectedArtifact.metadata && (
+                  <Box>
+                    <Typography variant="subtitle2" fontWeight="bold" mb={1}>
+                      Metadata
+                    </Typography>
+                    <pre style={{ fontSize: 12, background: '#f5f5f5', padding: 8, borderRadius: 4 }}>
+                      {JSON.stringify(selectedArtifact.metadata, null, 2)}
+                    </pre>
+                  </Box>
+                )}
+                {/* Show all artifact fields */}
+                <Box mt={2}>
+                  <Typography variant="subtitle2" fontWeight="bold" mb={1}>
+                    All Artifact Data (Raw)
+                  </Typography>
+                  <pre style={{ fontSize: 12, background: '#f5f5f5', padding: 8, borderRadius: 4 }}>
+                    {JSON.stringify(selectedArtifact, null, 2)}
+                  </pre>
+                </Box>
+              </>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setSelectedArtifact(null)} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* All Record Data (Raw) */}
+        <Box mb={3}>
+          <Typography variant="subtitle2" fontWeight="bold" mb={1}>
+            All Record Data (Raw)
+          </Typography>
+          <pre
+            style={{
+              fontSize: 12,
+              background: '#f5f5f5',
+              padding: 8,
+              borderRadius: 4,
+              maxHeight: 300,
+              overflow: 'auto',
+            }}
+          >
+            {JSON.stringify(record, null, 2)}
+          </pre>
         </Box>
       </CardContent>
     </Card>

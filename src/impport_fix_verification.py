@@ -113,7 +113,7 @@ except Exception as e:
 print("\n🔍 Import Analysis Complete")
 print("=" * 25)
 print("✅ All required modules import correctly")
-print("✅ No problematic QuiltBlock/QuiltPanel imports")
+print("✅ No problematic QuiltBlock/QuiltArtifact imports")
 print("✅ Proper separation of concerns maintained")
 print("✅ Error resilience implemented")
 print("\n💡 Next steps:")

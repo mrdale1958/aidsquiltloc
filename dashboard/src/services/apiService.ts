@@ -109,7 +109,7 @@ class ApiService {
         
         const fallbackStats: Stats = {
           total_blocks: recordsResponse.total,
-          total_panels: Math.round(recordsResponse.total * 2.9), // Estimated ratio based on LOC data
+          total_artifacts: Math.round(recordsResponse.total * 2.9), // Estimated ratio based on LOC data
           blocks_with_images: 0, // Unknown without dedicated API endpoint
           recent_blocks: recordsResponse.total, // Assume all records are recent without date filtering
           database_size_bytes: 0, // Unknown without file system access
@@ -165,7 +165,7 @@ class ApiService {
 
   /**
    * Get specific AIDS Memorial Quilt record by ID
-   * Retrieves detailed record information including panel data
+   * Retrieves detailed record information including artifact data
    */
   async getRecord(id: string): Promise<QuiltRecord> {
     return this.fetchWithError<QuiltRecord>(`${API_BASE_URL}/records/${id}`);

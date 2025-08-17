@@ -387,7 +387,7 @@ class MetadataExtractor:
         # Look in title
         title = item_data.get('title', '')
         if title:
-            # Pattern like "AIDS Quilt Block 2621 Panel Maker Records"
+            # Pattern like "AIDS Quilt Block 2621 Artifact Maker Records"
             # The actual names are often in description or other fields
             pass
         

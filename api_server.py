@@ -66,6 +66,7 @@ app.add_middleware(
 # Initialize configuration following centralized settings management
 config = ScraperConfig()
 db_manager = None
+db_path = "output/quilt_data.db"  # Add this line near the top, after config is loaded
 
 # Pydantic models for API responses following project type safety standards
 class QuiltRecordResponse(BaseModel):
@@ -90,7 +91,7 @@ class QuiltRecordResponse(BaseModel):
 class StatsResponse(BaseModel):
     """Enhanced statistics response with comprehensive AIDS Memorial Quilt metrics"""
     total_blocks: int
-    total_panels: int
+    total_artifacts: int
     blocks_with_images: int
     recent_blocks: int
     database_size_bytes: int
@@ -149,7 +150,7 @@ def convert_db_record_to_response(record: Dict[str, Any]) -> QuiltRecordResponse
     """
     try:
         return QuiltRecordResponse(
-            id=str(record.get('id', 'unknown')),
+            #id=str(record.get('id', 'unknown')),
             item_id=str(record.get('item_id', record.get('id', 'unknown'))),
             title=record.get('title', 'AIDS Memorial Quilt Record'),
             description=record.get('description'),
@@ -198,7 +199,7 @@ async def get_db_manager() -> Optional[DatabaseManager]:
             logger.info(f"   Total records: {total_records:,}")
             logger.info(f"   Database health: {stats.get('database_health', 'unknown')}")
             logger.info(f"   Total blocks: {stats.get('total_blocks', 0):,}")
-            logger.info(f"   Total panels: {stats.get('total_panels', 0):,}")
+            logger.info(f"   Total artifacts: {stats.get('total_artifacts', 0):,}")
             
         except Exception as e:
             logger.error(f"AIDS Memorial Quilt API: Database initialization failed: {e}")
@@ -260,7 +261,7 @@ async def root():
             
             database_info = {
                 "total_blocks": stats.get('total_blocks', 0),
-                "total_panels": stats.get('total_panels', 0),
+                "total_artifacts": stats.get('total_artifacts', 0),
                 "total_records": total_records,
                 "database_size_mb": round(stats.get('database_size_bytes', 0) / 1024 / 1024, 2),
                 "database_health": stats.get('database_health', 'unknown')
@@ -268,7 +269,7 @@ async def root():
         else:
             database_info = {
                 "total_blocks": 0,
-                "total_panels": 0,
+                "total_artifacts": 0,
                 "total_records": 0,
                 "database_size_mb": 0,
                 "database_health": "unavailable"
@@ -301,14 +302,13 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint for API connectivity testing with verbose logging"""
-    db_path = "output/quilt_data.db"
     health_obj = {
         "status": "unhealthy",
         "service": "AIDS Memorial Quilt Records API",
         "database": {
             "connected": False,
             "blocks": None,
-            "panels": None,
+            "artifacts": None,
             "records": None,
             "health": "error",
             "error": None
@@ -324,19 +324,19 @@ async def health_check():
             cur = conn.cursor()
             cur.execute("SELECT COUNT(*) FROM quilt_blocks")
             blocks = cur.fetchone()[0]
-            cur.execute("SELECT COUNT(*) FROM quilt_panels")
-            panels = cur.fetchone()[0]
+            cur.execute("SELECT COUNT(*) FROM quilt_artifacts")
+            artifacts = cur.fetchone()[0]
             cur.execute("SELECT COUNT(*) FROM quilt_blocks WHERE image_path IS NOT NULL AND image_path != ''")
             blocks_with_images = cur.fetchone()[0]
             health_obj["database"].update({
                 "connected": True,
                 "blocks": blocks,
-                "panels": panels,
+                "artifacts": artifacts,
                 "blocks_with_images": blocks_with_images,
-                "health": "healthy" if blocks > 0 and panels > 0 else "limited",
+                "health": "healthy" if blocks > 0 and artifacts > 0 else "limited",
                 "error": None
             })
-            health_obj["status"] = "healthy" if blocks > 0 and panels > 0 else "limited"
+            health_obj["status"] = "healthy" if blocks > 0 and artifacts > 0 else "limited"
             conn.close()
     except Exception as e:
         health_obj["database"]["error"] = str(e)
@@ -515,44 +515,43 @@ async def get_stats():
     """
     Returns summary statistics for the AIDS Memorial Quilt database.
     """
-    db_path = "output/quilt_data.db"
     try:
         if not os.path.exists(db_path):
             health = "empty"
-            total_blocks = total_panels = panels_with_images = recent_blocks = database_size_bytes = 0
+            total_blocks = total_artifacts = artifacts_with_images = recent_blocks = database_size_bytes = 0
         else:
             conn = sqlite3.connect(db_path)
             cur = conn.cursor()
             try:
                 cur.execute("SELECT COUNT(*) FROM quilt_blocks")
                 total_blocks = cur.fetchone()[0]
-                cur.execute("SELECT COUNT(*) FROM quilt_panels")
-                total_panels = cur.fetchone()[0]
-                # Count panels where image_urls is a non-empty JSON array
+                cur.execute("SELECT COUNT(*) FROM quilt_artifacts")
+                total_artifacts = cur.fetchone()[0]
+                # Count artifacts where image_urls is a non-empty JSON array
                 cur.execute("""
-                    SELECT COUNT(*) FROM quilt_panels
+                    SELECT COUNT(*) FROM quilt_artifacts
                     WHERE image_urls IS NOT NULL
                       AND json_array_length(image_urls) > 0
                 """)
-                panels_with_images = cur.fetchone()[0]
+                artifacts_with_images = cur.fetchone()[0]
                 recent_blocks = total_blocks  # Or implement date logic if you have a date field
                 database_size_bytes = os.path.getsize(db_path)
                 if total_blocks == 0:
                     health = "empty"
-                elif total_panels == 0:
-                    health = "no_panels"
+                elif total_artifacts == 0:
+                    health = "no_artifacts"
                 else:
                     health = "healthy"
             except Exception as e:
                 logger.error(f"AIDS Memorial Quilt API: Error in /stats SQL: {e}")
                 health = "limited"
-                total_blocks = total_panels = panels_with_images = recent_blocks = database_size_bytes = 0
+                total_blocks = total_artifacts = artifacts_with_images = recent_blocks = database_size_bytes = 0
             finally:
                 conn.close()
         return {
             "total_blocks": total_blocks,
-            "total_panels": total_panels,
-            "panels_with_images": panels_with_images,
+            "total_artifacts": total_artifacts,
+            "artifacts_with_images": artifacts_with_images,
             "recent_blocks": recent_blocks,
             "database_size_bytes": database_size_bytes,
             "database_health": health,
@@ -562,13 +561,39 @@ async def get_stats():
         logger.error(f"AIDS Memorial Quilt API: Error in /stats: {e}")
         return {
             "total_blocks": 0,
-            "total_panels": 0,
-            "panels_with_images": 0,
+            "total_artifacts": 0,
+            "artifacts_with_images": 0,
             "recent_blocks": 0,
             "database_size_bytes": 0,
             "database_health": "error",
             "last_updated": datetime.now(timezone.utc).isoformat()
         }
+
+@app.get("/api/artifacts")
+async def get_artifacts(block_id: str = Query(..., description="Block ID to filter artifacts")):
+    """
+    Get all artifacts associated with a given block_id.
+    """
+    try:
+        if not db_path or not os.path.exists(db_path):
+            logger.warning("Database not found for /api/artifacts")
+            return JSONResponse(content={"artifacts": []})
+
+        conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT * FROM quilt_artifacts WHERE block_id = ?",
+            (block_id,)
+        )
+        rows = cur.fetchall()
+        artifacts = [dict(row) for row in rows]
+        conn.close()
+        return {"artifacts": artifacts}
+    except Exception as e:
+        logger.error(f"Error fetching artifacts for block_id {block_id}: {e}")
+        return JSONResponse(content={"artifacts": []}, status_code=500)
+    
 
 if __name__ == "__main__":
     # Set up comprehensive logging following project guidelines

@@ -61,7 +61,7 @@ def verify_import_structure() -> None:
         print(f"📋 Available items in src.database: {available_items}")
         
         # Check for problematic imports
-        problematic_items = ['QuiltBlock', 'QuiltPanel']
+        problematic_items = ['QuiltBlock', 'QuiltArtifact']
         for item in problematic_items:
             if hasattr(db_module, item):
                 print(f"⚠️  Found unexpected item: {item}")

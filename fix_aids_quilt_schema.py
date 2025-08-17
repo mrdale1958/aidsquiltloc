@@ -113,7 +113,7 @@ class QuiltDatabaseSchemaPatcher:
                         logger.info(f"AIDS Memorial Quilt Schema Fix: {table_name} - {row_count:,} rows, {len(columns)} columns")
                         
                         # Check for specific compatibility issues
-                        if table_name in ['quilt_blocks', 'quilt_panels']:
+                        if table_name in ['quilt_blocks', 'quilt_artifacts']:
                             if 'metadata' not in column_names and 'metadata_json' in column_names:
                                 schema_analysis["compatibility_issues"].append({
                                     'table': table_name,
@@ -174,10 +174,10 @@ class QuiltDatabaseSchemaPatcher:
                 "created_at": self._find_best_column(available_columns, ["scraped_at", "created_date"]),
                 "updated_at": self._find_best_column(available_columns, ["updated_at", "scraped_at"])
             }
-        elif table_name == "quilt_panels":
+        elif table_name == "quilt_artifacts":
             column_mappings = {
-                "id": self._find_best_column(available_columns, ["id", "panel_id"]),
-                "item_id": self._find_best_column(available_columns, ["panel_id", "block_id", "id"]),
+                "id": self._find_best_column(available_columns, ["id", "artifact_id"]),
+                "item_id": self._find_best_column(available_columns, ["artifact_id", "block_id", "id"]),
                 "title": self._find_best_column(available_columns, ["title"]),
                 "description": self._find_best_column(available_columns, ["description"]),
                 "subjects": self._extract_metadata_field("subjects", available_columns),
@@ -395,7 +395,7 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
                 else:
                     record[json_field] = []
             
-            # Handle image_urls field for AIDS Memorial Quilt panels
+            # Handle image_urls field for AIDS Memorial Quilt artifacts
             if record.get("url") or record.get("image_url"):
                 for url_field in ["url", "image_url"]:
                     url_value = record.get(url_field)
@@ -445,7 +445,7 @@ async def _determine_primary_data_source(self) -> str:
     """
     try:
         # Check table row counts to determine best data source
-        tables_to_check = ["collection_items", "quilt_blocks", "quilt_panels"]
+        tables_to_check = ["collection_items", "quilt_blocks", "quilt_artifacts"]
         table_stats = {{}}
         
         for table_name in tables_to_check:

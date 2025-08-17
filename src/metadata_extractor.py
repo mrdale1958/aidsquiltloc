@@ -24,7 +24,7 @@ class MetadataExtractor:
     Extracts and normalizes metadata from LOC API responses
     
     Handles the complex nested structure of LOC JSON responses and extracts
-    relevant information for AIDS Memorial Quilt blocks and panels following
+    relevant information for AIDS Memorial Quilt blocks and artifacts following
     project architecture patterns.
     """
     
@@ -91,7 +91,10 @@ class MetadataExtractor:
             return normalized_metadata
             
         except Exception as e:
-            logger.error("Unexpected error extracting metadata for %s: %s", item_id, e)
+            logger.error("Unexpected error extracting metadata for %s: %s", item_id, type(e).__name__,
+        e,
+        exc_info=True  # This will include the stack trace in the log
+    )
             raise MetadataExtractionError(f"Extraction error: {e}")
     
     def _normalize_metadata(self, raw_data: Dict[str, Any], item_id: str) -> Dict[str, Any]:

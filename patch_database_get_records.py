@@ -101,20 +101,20 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
             quilt_blocks_count = (await cursor.fetchone())[0]
             await cursor.close()
             
-            cursor = await self.connection.execute("SELECT COUNT(*) FROM quilt_panels")
-            quilt_panels_count = (await cursor.fetchone())[0]
+            cursor = await self.connection.execute("SELECT COUNT(*) FROM quilt_artifacts")
+            quilt_artifacts_count = (await cursor.fetchone())[0]
             await cursor.close()
             
             # Use collection_items if it has data, otherwise use table with most records
             if collection_items_count > 0:
                 primary_table = "collection_items"
                 logger.info(f"AIDS Memorial Quilt DB: Using collection_items as primary source ({collection_items_count:,} records)")
-            elif quilt_blocks_count >= quilt_panels_count:
+            elif quilt_blocks_count >= quilt_artifacts_count:
                 primary_table = "quilt_blocks"
                 logger.info(f"AIDS Memorial Quilt DB: Using quilt_blocks as primary source ({quilt_blocks_count:,} records)")
             else:
-                primary_table = "quilt_panels"
-                logger.info(f"AIDS Memorial Quilt DB: Using quilt_panels as primary source ({quilt_panels_count:,} records)")
+                primary_table = "quilt_artifacts"
+                logger.info(f"AIDS Memorial Quilt DB: Using quilt_artifacts as primary source ({quilt_artifacts_count:,} records)")
                 
         except Exception as source_error:
             logger.warning(f"AIDS Memorial Quilt DB: Error determining data source: {source_error}")
@@ -151,10 +151,10 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
                 ORDER BY id DESC
                 LIMIT ? OFFSET ?
             """
-        else:  # quilt_panels
-            # quilt_panels requires different column mapping
+        else:  # quilt_artifacts
+            # quilt_artifacts requires different column mapping
             query = """
-                SELECT id, panel_id as item_id, title, description,
+                SELECT id, artifact_id as item_id, title, description,
                        CASE 
                            WHEN metadata_json IS NOT NULL AND metadata_json != '{}' 
                            THEN json_extract(metadata_json, '$.subjects')
@@ -168,7 +168,7 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
                        scraped_at as dates,
                        image_urls as url, image_urls as image_url, NULL as content_hash,
                        scraped_at as created_at, updated_at
-                FROM quilt_panels
+                FROM quilt_artifacts
                 ORDER BY id DESC
                 LIMIT ? OFFSET ?
             """
@@ -213,7 +213,7 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
                 else:
                     record[json_field] = []
             
-            # Handle image_urls field for AIDS Memorial Quilt panels
+            # Handle image_urls field for AIDS Memorial Quilt artifacts
             for url_field in ["url", "image_url"]:
                 url_value = record.get(url_field)
                 if url_value and url_value != "NULL" and url_value is not None:
@@ -288,9 +288,9 @@ async def get_records(self, limit: int = 20, offset: int = 0) -> List[Dict[str, 
                 
                 print(f"\n💡 This patch addresses:")
                 print("• ✅ metadata -> metadata_json column compatibility")
-                print("• ✅ Intelligent table selection (collection_items > quilt_blocks > quilt_panels)")
+                print("• ✅ Intelligent table selection (collection_items > quilt_blocks > quilt_artifacts)")
                 print("• ✅ JSON metadata extraction for subjects/names")
-                print("• ✅ Image URLs handling for quilt panels")
+                print("• ✅ Image URLs handling for quilt artifacts")
                 print("• ✅ Library of Congress attribution preservation")
                 print("• ✅ Digital humanities metadata standards compliance")
                 

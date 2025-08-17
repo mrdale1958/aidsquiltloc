@@ -1,7 +1,7 @@
 """
 Enhanced database manager for AIDS Memorial Quilt Records
 Implements comprehensive error handling and async operations following project standards
-Supports QuiltBlock and QuiltPanel schema with proper type safety
+Supports QuiltBlock and QuiltArtifact schema with proper type safety
 """
 
 import asyncio
@@ -11,7 +11,10 @@ from typing import List, Dict, Any, Optional, Union
 import logging
 import json
 import traceback
-from datetime import datetime, timedelta
+
+from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
+
 
 # Configure structured logging per project guidelines
 logger = logging.getLogger(__name__)
@@ -23,6 +26,62 @@ class DatabaseConnectionError(Exception):
 class DataValidationError(Exception):
     """Raised when data validation fails"""
     pass
+
+@dataclass
+class QuiltBlock:
+    """
+    Represents an AIDS Memorial Quilt block with comprehensive metadata
+    
+    Following project standards for data validation and type safety
+    """
+    block_id: str
+    title: str
+    description: str
+    created_date: str
+    metadata_json: str
+    total_artifacts: int
+    scraped_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    
+    def __post_init__(self) -> None:
+        """
+        Post-initialization validation and timestamp setting
+        
+        Uses timezone-aware datetime objects following modern Python practices
+        """
+        if self.scraped_at is None:
+            self.scraped_at = datetime.now(timezone.utc)
+        if self.updated_at is None:
+            self.updated_at = datetime.now(timezone.utc)
+
+
+@dataclass
+class QuiltArtifact:
+    """
+    Represents an individual artifact within an AIDS Memorial Quilt block
+    
+    Includes IIIF image URLs and manuscript metadata following LOC API patterns
+    """
+    block_id: str
+    artifact_id: str
+    title: str
+    description: str
+    image_urls: str  # JSON string of URL list to prevent SQLite binding errors
+    metadata_json: str
+    scraped_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    
+    def __post_init__(self) -> None:
+        """
+        Post-initialization validation and timestamp setting
+        
+        Uses timezone-aware datetime objects following modern Python practices
+        """
+        if self.scraped_at is None:
+            self.scraped_at = datetime.now(timezone.utc)
+        if self.updated_at is None:
+            self.updated_at = datetime.now(timezone.utc)
+
 
 class DatabaseManager:
     """
@@ -84,7 +143,7 @@ class DatabaseManager:
     async def _create_tables(self) -> None:
         """
         Create database tables following enhanced schema design
-        Implements QuiltBlock and QuiltPanel tables with proper relationships
+        Implements QuiltBlock and QuiltArtifact tables with proper relationships
         """
         try:
             cursor = self.connection.cursor()
@@ -96,17 +155,17 @@ class DatabaseManager:
                     title TEXT NOT NULL,
                     description TEXT,
                     created_date TEXT,
-                    total_panels INTEGER DEFAULT 0,
+                    total_artifacts INTEGER DEFAULT 0,
                     scraped_at TEXT,
                     updated_at TEXT,
                     metadata TEXT
                 )
             """)
             
-            # Create QuiltPanel table for individual panel data
+            # Create QuiltArtifact table for individual artifact data
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS quilt_panels (
-                    panel_id TEXT PRIMARY KEY,
+                CREATE TABLE IF NOT EXISTS quilt_artifacts (
+                    artifact_id TEXT PRIMARY KEY,
                     block_id TEXT NOT NULL,
                     title TEXT NOT NULL,
                     description TEXT,
@@ -140,9 +199,9 @@ class DatabaseManager:
             # Create indexes for performance optimization
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_quilt_blocks_title ON quilt_blocks(title)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_quilt_blocks_scraped_at ON quilt_blocks(scraped_at)")
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_quilt_panels_block_id ON quilt_panels(block_id)")
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_quilt_panels_title ON quilt_panels(title)")
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_quilt_panels_scraped_at ON quilt_panels(scraped_at)")
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_quilt_artifacts_block_id ON quilt_artifacts(block_id)")
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_quilt_artifacts_title ON quilt_artifacts(title)")
+            cursor.execute("CREATE INDEX IF NOT EXISTS idx_quilt_artifacts_scraped_at ON quilt_artifacts(scraped_at)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_collection_items_title ON collection_items(title)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_collection_items_created_at ON collection_items(created_at)")
             
@@ -178,23 +237,23 @@ class DatabaseManager:
             cursor.execute("SELECT COUNT(*) FROM quilt_blocks")
             quilt_blocks_count = cursor.fetchone()[0] or 0
             
-            # Check quilt_panels count
-            cursor.execute("SELECT COUNT(*) FROM quilt_panels")
-            quilt_panels_count = cursor.fetchone()[0] or 0
+            # Check quilt_artifacts count
+            cursor.execute("SELECT COUNT(*) FROM quilt_artifacts")
+            quilt_artifacts_count = cursor.fetchone()[0] or 0
             
             # Determine primary source based on data availability
             if collection_items_count > 0:
                 self._primary_data_source = "collection_items"
             elif quilt_blocks_count > 0:
                 self._primary_data_source = "quilt_blocks"
-            elif quilt_panels_count > 0:
-                self._primary_data_source = "quilt_panels"
+            elif quilt_artifacts_count > 0:
+                self._primary_data_source = "quilt_artifacts"
             else:
                 self._primary_data_source = "none"
             
             logger.info(f"AIDS Memorial Quilt Database: Primary data source determined as '{self._primary_data_source}' "
                        f"(collection_items: {collection_items_count}, quilt_blocks: {quilt_blocks_count}, "
-                       f"quilt_panels: {quilt_panels_count})")
+                       f"quilt_artifacts: {quilt_artifacts_count})")
             
             return self._primary_data_source
             
@@ -234,7 +293,7 @@ class DatabaseManager:
             table_counts = {}
             cursor = self.connection.cursor()
             
-            for table_name in ["collection_items", "quilt_blocks", "quilt_panels"]:
+            for table_name in ["collection_items", "quilt_blocks", "quilt_artifacts"]:
                 try:
                     cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
                     result = cursor.fetchone()
@@ -245,10 +304,10 @@ class DatabaseManager:
             # Choose primary table based on data availability
             if table_counts.get("collection_items", 0) > 0:
                 primary_table = "collection_items"
-            elif table_counts.get("quilt_blocks", 0) >= table_counts.get("quilt_panels", 0):
+            elif table_counts.get("quilt_blocks", 0) >= table_counts.get("quilt_artifacts", 0):
                 primary_table = "quilt_blocks"
             else:
-                primary_table = "quilt_panels"
+                primary_table = "quilt_artifacts"
             
             logger.info(f"AIDS Memorial Quilt Database: Attempting to fetch records from {primary_table} (limit: {limit}, offset: {offset})")
             
@@ -279,7 +338,7 @@ class DatabaseManager:
                     metadata_column = "metadata"
                 
                 cursor.execute(f"""
-                    SELECT id, block_id as item_id, title, description, 
+                    SELECT block_id as item_id, title, description, 
                            CASE 
                                WHEN {metadata_column} IS NOT NULL AND {metadata_column} != '{{}}' 
                                THEN json_extract({metadata_column}, '$.subjects')
@@ -294,12 +353,12 @@ class DatabaseManager:
                            NULL as url, NULL as image_url, NULL as content_hash,
                            scraped_at as created_at, updated_at
                     FROM quilt_blocks
-                    ORDER BY id DESC
+                    ORDER BY item_id DESC
                     LIMIT ? OFFSET ?
                 """, (limit, offset))
-            else:  # quilt_panels
+            else:  # quilt_artifacts
                 # Check if metadata_json column exists, fall back to metadata if not
-                cursor.execute("PRAGMA table_info(quilt_panels)")
+                cursor.execute("PRAGMA table_info(quilt_artifacts)")
                 columns_info = cursor.fetchall()
                 available_columns = [col[1] for col in columns_info]
                 
@@ -309,7 +368,7 @@ class DatabaseManager:
                     metadata_column = "metadata"
                 
                 cursor.execute(f"""
-                    SELECT id, panel_id as item_id, title, description,
+                    SELECT artifact_id as item_id, title, description,
                            CASE 
                                WHEN {metadata_column} IS NOT NULL AND {metadata_column} != '{{}}' 
                                THEN json_extract({metadata_column}, '$.subjects')
@@ -323,15 +382,15 @@ class DatabaseManager:
                            scraped_at as dates,
                            image_urls as url, image_urls as image_url, NULL as content_hash,
                            scraped_at as created_at, updated_at
-                    FROM quilt_panels
-                    ORDER BY id DESC
+                    FROM quilt_artifacts
+                    ORDER BY item_id DESC
                     LIMIT ? OFFSET ?
                 """, (limit, offset))
             
             rows = cursor.fetchall()
             
             # Convert to API-compatible format following digital humanities standards
-            columns = ["id", "item_id", "title", "description", "subjects", 
+            columns = ["item_id", "title", "description", "subjects", 
                       "names", "dates", "url", "image_url", "content_hash", 
                       "created_at", "updated_at"]
             
@@ -424,10 +483,10 @@ class DatabaseManager:
             result = cursor.fetchone()
             total_blocks = int(result[0]) if result and result[0] is not None else 0
             
-            # Get total panels count
-            cursor.execute("SELECT COUNT(*) as total_panels FROM quilt_panels")
+            # Get total artifacts count
+            cursor.execute("SELECT COUNT(*) as total_artifacts FROM quilt_artifacts")
             result = cursor.fetchone()
-            total_panels = int(result[0]) if result and result[0] is not None else 0
+            total_artifacts = int(result[0]) if result and result[0] is not None else 0
             
             # Get legacy items count for backwards compatibility
             cursor.execute("SELECT COUNT(*) as total_items FROM collection_items")
@@ -447,7 +506,7 @@ class DatabaseManager:
                 # Count blocks that have image URLs available (not necessarily downloaded)
                 cursor.execute("""
                     SELECT COUNT(DISTINCT block_id) 
-                    FROM quilt_panels 
+                    FROM quilt_artifacts 
                     WHERE image_urls IS NOT NULL AND image_urls != '' AND image_urls != '[]'
                 """)
                 result = cursor.fetchone()
@@ -463,10 +522,10 @@ class DatabaseManager:
                 result = cursor.fetchone()
                 blocks_with_downloaded_images = int(result[0]) if result and result[0] is not None else 0
                 
-                # Count total potential images (panels with URLs)
+                # Count total potential images (artifacts with URLs)
                 cursor.execute("""
                     SELECT COUNT(*) 
-                    FROM quilt_panels 
+                    FROM quilt_artifacts 
                     WHERE image_urls IS NOT NULL AND image_urls != '' AND image_urls != '[]'
                 """)
                 result = cursor.fetchone()
@@ -533,8 +592,8 @@ class DatabaseManager:
             # Determine database health following project standards
             if total_blocks == 0 and total_items == 0:
                 health = "empty"
-            elif total_panels == 0 and total_items == 0:
-                health = "no_panels"
+            elif total_artifacts == 0 and total_items == 0:
+                health = "no_artifacts"
             elif total_blocks > 100 or total_items > 100:
                 health = "healthy"
             elif total_blocks > 10 or total_items > 10:
@@ -569,7 +628,7 @@ class DatabaseManager:
             
             stats = {
                 'total_blocks': total_blocks,
-                'total_panels': total_panels,
+                'total_artifacts': total_artifacts,
                 'blocks_with_images': blocks_with_images,  # Now represents actually downloaded images
                 'recent_blocks': recent_blocks,
                 'database_size_bytes': database_size_bytes,
@@ -593,7 +652,7 @@ class DatabaseManager:
         """Return safe default statistics following error resilience guidelines"""
         return {
             'total_blocks': 0,
-            'total_panels': 0,
+            'total_artifacts': 0,
             'blocks_with_images': 0,
             'recent_blocks': 0,
             'database_size_bytes': 0,
@@ -645,9 +704,9 @@ class DatabaseManager:
             elif primary_source == "quilt_blocks":
                 cursor.execute("SELECT COUNT(*) FROM quilt_blocks")
                 count = cursor.fetchone()[0] or 0
-            elif primary_source == "quilt_panels":
-                # Count distinct blocks when using panels as source
-                cursor.execute("SELECT COUNT(DISTINCT block_id) FROM quilt_panels")
+            elif primary_source == "quilt_artifacts":
+                # Count distinct blocks when using artifacts as source
+                cursor.execute("SELECT COUNT(DISTINCT block_id) FROM quilt_artifacts")
                 count = cursor.fetchone()[0] or 0
             else:
                 count = 0
@@ -675,7 +734,7 @@ class DatabaseManager:
             diagnosis = {}
             
             # Check all tables and their data
-            tables_to_check = ['quilt_blocks', 'quilt_panels', 'collection_items']
+            tables_to_check = ['quilt_blocks', 'quilt_artifacts', 'collection_items']
             
             for table in tables_to_check:
                 try:
@@ -727,14 +786,14 @@ class DatabaseManager:
         
         collection_items_count = diagnosis.get('collection_items', {}).get('row_count', 0)
         quilt_blocks_count = diagnosis.get('quilt_blocks', {}).get('row_count', 0)
-        quilt_panels_count = diagnosis.get('quilt_panels', {}).get('row_count', 0)
+        quilt_artifacts_count = diagnosis.get('quilt_artifacts', {}).get('row_count', 0)
         
-        if collection_items_count == 0 and quilt_blocks_count == 0 and quilt_panels_count == 0:
+        if collection_items_count == 0 and quilt_blocks_count == 0 and quilt_artifacts_count == 0:
             recommendations.append("No data found in any table - run data scraping to populate database")
         elif collection_items_count == 0 and quilt_blocks_count > 0:
             recommendations.append("Use quilt_blocks as primary data source for API responses")
-        elif collection_items_count == 0 and quilt_panels_count > 0:
-            recommendations.append("Consider aggregating quilt_panels data for API responses")
+        elif collection_items_count == 0 and quilt_artifacts_count > 0:
+            recommendations.append("Consider aggregating quilt_artifacts data for API responses")
         elif collection_items_count > 0:
             recommendations.append("collection_items table has data and should work for API responses")
         
@@ -800,7 +859,7 @@ class DatabaseManager:
                     
             elif primary_source == "quilt_blocks":
                 cursor.execute("""
-                    SELECT block_id, title, description, created_date, total_panels,
+                    SELECT block_id, title, description, created_date, total_artifacts,
                            scraped_at, updated_at, metadata
                     FROM quilt_blocks 
                     WHERE title LIKE ? OR description LIKE ?
@@ -823,7 +882,7 @@ class DatabaseManager:
                         'content_hash': None,
                         'created_at': row[5],
                         'updated_at': row[6],
-                        'total_panels': row[4] or 0,
+                        'total_artifacts': row[4] or 0,
                         'metadata': self._safe_json_parse(row[7])
                     }
                     records.append(record)
@@ -966,7 +1025,7 @@ class DatabaseManager:
             
             # Try QuiltBlock table
             cursor.execute("""
-                SELECT block_id, title, description, created_date, total_panels,
+                SELECT block_id, title, description, created_date, total_artifacts,
                        scraped_at, updated_at, metadata
                 FROM quilt_blocks WHERE block_id = ?
             """, (record_id,))
@@ -987,7 +1046,7 @@ class DatabaseManager:
                     'content_hash': None,
                     'created_at': row[5],
                     'updated_at': row[6],
-                    'total_panels': row[4] or 0,
+                    'total_artifacts': row[4] or 0,
                     'metadata': self._safe_json_parse(row[7])
                 }
             
@@ -996,3 +1055,141 @@ class DatabaseManager:
         except Exception as e:
             logger.error(f"AIDS Memorial Quilt Database: Error getting record {record_id}: {e}")
             return None
+
+    async def update_block_metadata(self, block_id: str, metadata: Dict[str, Any]) -> bool:
+        """
+        Update the metadata_json field for a given block in the database.
+
+        Args:
+            block_id: The block identifier (e.g., "0001")
+            metadata: The metadata dictionary to store (will be JSON-serialized)
+
+        Returns:
+            True if the update was successful (row exists and was updated), False otherwise.
+        """
+        try:
+            if not self.connection:
+                logger.warning("AIDS Memorial Quilt Database: No connection available for update_block_metadata")
+                return False
+
+            metadata_json = json.dumps(metadata)
+            cursor = self.connection.cursor()
+            cursor.execute(
+                """
+                UPDATE quilt_blocks
+                SET metadata_json = ?
+                WHERE block_id = ?
+                """,
+                (metadata_json, block_id)
+            )
+            self.connection.commit()
+            updated = cursor.rowcount > 0
+            if updated:
+                logger.info("Updated metadata for block %s in database.", block_id)
+            else:
+                logger.warning("No block found with block_id %s to update metadata.", block_id)
+            return updated
+        except Exception as e:
+            logger.error("Error updating metadata for block %s: %s", block_id, e)
+            return False
+
+    async def save_block(self, block: 'QuiltBlock') -> bool:
+        """
+        Insert a new block record into the quilt_blocks table.
+
+        Args:
+            block: QuiltBlock instance to insert
+
+        Returns:
+            True if the block was inserted, False if a block with the same block_id already exists.
+        """
+        try:
+            if not self.connection:
+                logger.warning("AIDS Memorial Quilt Database: No connection available for save_block")
+                return False
+
+            cursor = self.connection.cursor()
+            cursor.execute(
+                """
+                INSERT INTO quilt_blocks (
+                    block_id,
+                    title,
+                    description,
+                    created_date,
+                    metadata_json,
+                    total_artifacts,
+                    scraped_at,
+                    updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    block.block_id,
+                    block.title,
+                    block.description,
+                    block.created_date,
+                    block.metadata_json,
+                    block.total_artifacts,
+                    block.scraped_at,
+                    block.updated_at,
+                )
+            )
+            self.connection.commit()
+            logger.info("Inserted block %s into database.", block.block_id)
+            return True
+        except Exception as e:
+            # If the block already exists, do not treat as fatal error
+            if "UNIQUE constraint failed" in str(e):
+                logger.info("Block %s already exists in database.", block.block_id)
+                return False
+            logger.error("Error inserting block %s: %s", block.block_id, e)
+            return False
+
+    async def save_artifact(self, artifact: 'QuiltArtifact') -> bool:
+        """
+        Insert a new artifact record into the quilt_artifacts table.
+
+        Args:
+            artifact: QuiltArtifact instance to insert
+
+        Returns:
+            True if the artifact was inserted, False if an artifact with the same artifact_id already exists.
+        """
+        try:
+            if not self.connection:
+                logger.warning("AIDS Memorial Quilt Database: No connection available for save_artifact")
+                return False
+
+            cursor = self.connection.cursor()
+            cursor.execute(
+                """
+                INSERT INTO quilt_artifacts (
+                    artifact_id,
+                    block_id,
+                    title,
+                    description,
+                    image_urls,
+                    scraped_at,
+                    updated_at,
+                    metadata
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    artifact.artifact_id,
+                    artifact.block_id,
+                    artifact.title,
+                    artifact.description,
+                    artifact.image_urls,
+                    artifact.scraped_at,
+                    artifact.updated_at,
+                    artifact.metadata_json if hasattr(artifact, "metadata_json") else artifact.metadata,
+                )
+            )
+            self.connection.commit()
+            logger.info("Inserted artifact %s into database.", artifact.artifact_id)
+            return True
+        except Exception as e:
+            if "UNIQUE constraint failed" in str(e):
+                logger.info("Artifact %s already exists in database.", artifact.artifact_id)
+                return False
+            logger.error("Error inserting artifact %s: %s", artifact.artifact_id, e)
+            return False

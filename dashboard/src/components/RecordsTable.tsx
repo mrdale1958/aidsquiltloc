@@ -131,9 +131,9 @@ const RecordsTable: React.FC<RecordsTableProps> = ({
             <TableBody>
               {records.map((record) => (
                 <TableRow
-                  key={record.id}
+                  key={record.block_id}
                   hover
-                  selected={selectedRecord?.id === record.id}
+                  selected={selectedRecord?.block_id === record.block_id}
                   sx={{
                     cursor: 'pointer',
                     '&.Mui-selected': {
@@ -162,7 +162,7 @@ const RecordsTable: React.FC<RecordsTableProps> = ({
                       {record.title}
                     </Typography>
                     <Typography variant="caption" color="text.secondary" noWrap>
-                      ID: {record.item_id}
+                      ID: {record.block_id}
                     </Typography>
                   </TableCell>
                   <TableCell>

@@ -12,7 +12,7 @@ import {
   Storage as StorageIcon,
   PhotoLibrary as PhotoIcon,
   ViewModule as BlockIcon,
-  Dashboard as PanelIcon,
+  Dashboard as ArtifactIcon,
   Timeline as TrendIcon,
   CheckCircle as HealthIcon,
 } from '@mui/icons-material';
@@ -173,8 +173,8 @@ const HealthIndicator: React.FC<HealthIndicatorProps> = ({ health }) => {
         return { color: 'success', label: 'Healthy', icon: <HealthIcon /> };
       case 'limited':
         return { color: 'warning', label: 'Calculated Data', icon: <TrendIcon /> };
-      case 'no_panels':
-        return { color: 'warning', label: 'No Panels', icon: <TrendIcon /> };
+      case 'no_artifacts':
+        return { color: 'warning', label: 'No Artifacts', icon: <TrendIcon /> };
       case 'empty':
         return { color: 'error', label: 'Empty Database', icon: <StorageIcon /> };
       case 'error':
@@ -217,7 +217,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats }) => {
       console.warn('Invalid AIDS Memorial Quilt stats object received:', stats);
       return {
         total_blocks: 0,
-        total_panels: 0,
+        total_artifacts: 0,
         blocks_with_images: 0,
         recent_blocks: 0,
         database_size_bytes: 0,
@@ -229,7 +229,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats }) => {
     // Safely extract and convert all numeric values with type validation
     return {
       total_blocks: Number(stats.total_blocks) || 0,
-      total_panels: Number(stats.total_panels) || 0,
+      total_artifacts: Number(stats.total_artifacts) || 0,
       blocks_with_images: Number(stats.blocks_with_images) || 0,
       recent_blocks: Number(stats.recent_blocks) || 0,
       database_size_bytes: Number(stats.database_size_bytes) || 0,
@@ -240,10 +240,10 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats }) => {
 
   // Calculate derived metrics with safe math operations per performance optimization guidelines
   const derivedMetrics = React.useMemo(() => {
-    const { total_blocks, total_panels, blocks_with_images, database_size_bytes } = safeStats;
+    const { total_blocks, total_artifacts, blocks_with_images, database_size_bytes } = safeStats;
     
     return {
-      averagePanelsPerBlock: total_blocks > 0 ? (total_panels / total_blocks) : 0,
+      averageArtifactsPerBlock: total_blocks > 0 ? (total_artifacts / total_blocks) : 0,
       imageCompletionRate: total_blocks > 0 ? (blocks_with_images / total_blocks) * 100 : 0,
       databaseSizeMB: database_size_bytes / (1024 * 1024),
     };
@@ -277,13 +277,13 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats }) => {
           subtitle={isCalculatedData ? "From loaded records" : "AIDS Memorial Quilt blocks in database"}
         />
 
-        {/* Total Panels - Individual memorial panels within blocks */}
+        {/* Total Artifacts - Individual memorial artifacts within blocks */}
         <StatCard
-          title="Total Panels"
-          value={safeStats.total_panels}
-          icon={<PanelIcon />}
+          title="Total Artifacts"
+          value={safeStats.total_artifacts}
+          icon={<ArtifactIcon />}
           color="secondary"
-          subtitle={isCalculatedData ? "Estimated from records" : `Avg: ${derivedMetrics.averagePanelsPerBlock.toFixed(1)} panels/block`}
+          subtitle={isCalculatedData ? "Estimated from records" : `Avg: ${derivedMetrics.averageArtifactsPerBlock.toFixed(1)} artifacts/block`}
         />
 
         {/* Images Available - Digitization progress tracking */}
@@ -329,10 +329,10 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats }) => {
                   Coverage
                 </Typography>
                 <Typography variant="h6">
-                  {isCalculatedData ? 'Est.' : ''} {((safeStats.total_panels / Math.max(safeStats.total_blocks, 1)) * 100).toFixed(1)}%
+                  {isCalculatedData ? 'Est.' : ''} {((safeStats.total_artifacts / Math.max(safeStats.total_blocks, 1)) * 100).toFixed(1)}%
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {isCalculatedData ? 'Estimated panel coverage' : 'Average panel coverage per block'}
+                  {isCalculatedData ? 'Estimated artifact coverage' : 'Average artifact coverage per block'}
                 </Typography>
               </CardContent>
             </Card>
