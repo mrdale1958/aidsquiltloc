@@ -144,7 +144,10 @@ class LOCAPIClient:
                 logger.error("Network error retrieving item %s: %s", item_id, e)
                 raise LOCAPIError(f"Network error: {e}")
             except Exception as e:
-                logger.error("Unexpected error retrieving item %s: %s", item_id, e)
+                logger.error("Unexpected error retrieving item %s: %s", item_id, type(e).__name__,
+        e,
+        exc_info=True  # This will include the stack trace in the log
+    )
                 raise LOCAPIError(f"Unexpected error: {e}")
     
     async def search_collection(self, 

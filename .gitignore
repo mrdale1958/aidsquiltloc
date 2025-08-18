@@ -190,6 +190,9 @@ output/images/*
 output/metadata/*
 !output/metadata/.gitkeep
 
+# vestiges
+output-old/
+
 # Log files
 *.log
 scraper.log
