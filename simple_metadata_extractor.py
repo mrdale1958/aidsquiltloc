@@ -4,6 +4,7 @@ Verifies input JSON structure and inserts block values into the blocks table.
 Follows PEP 8, uses type hints, structured logging, and comprehensive error handling.
 """
 
+from importlib import resources
 import json
 import os
 
@@ -42,7 +43,7 @@ def is_block_json(data: Dict[str, Any]) -> bool:
 
 def insert_block_into_db(block_data: Dict[str, Any], db_path: str = DB_PATH) -> None:
     """Insert block data into the blocks table, serializing complex values as JSON strings."""
-    print("Connecting to DB:", os.path.abspath(db_path))
+    #print("Connecting to DB:", os.path.abspath(db_path))
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     conn.execute("PRAGMA foreign_keys = ON;")
@@ -59,7 +60,7 @@ def insert_block_into_db(block_data: Dict[str, Any], db_path: str = DB_PATH) -> 
     col_str = ", ".join(columns)
     placeholders = ", ".join(["?"] * len(values))
     sql = f"INSERT OR REPLACE INTO blocks ({col_str}) VALUES ({placeholders})"
-    print(sql, values)
+    #print(sql, values)
     try:
         cursor.execute(sql, values)
         conn.commit()
@@ -78,53 +79,53 @@ def extract_and_insert_artifacts(block_json: Dict[str, Any], block_id: str, db_p
         block_id: Block identifier
         db_path: Path to SQLite database
     """
-    resources = block_json.get("resources")
-    if not resources or "files" not in resources:
+    #print(block_json)
+
+    resources = block_json["resources"]
+    if not resources or not isinstance(resources, list):
         logger.info(f"No artifact resources found for block {block_id}")
         return
-
-    files = resources["files"]
-    if not isinstance(files, list):
-        logger.warning(f"'files' field is not a list for block {block_id}")
-        return
-
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    for file_group in files:
-        # file_group is expected to be a list of artifact descriptors
-        if not isinstance(file_group, list):
+  
+    for resource in resources:
+        files = resource.get("files")
+        if not files or not isinstance(files, list):
             continue
-        for descriptor in file_group:
-            # Extract manuscript_id from descriptor['url'] or similar field
-            url = descriptor.get("url", "")
-            manuscript_id = None
-            # Example: url contains .../afc2019048_XXXX_msYYYY/...
-            import re
-            match = re.search(r'afc2019048_(\d{4})_ms(\w+)', url)
-            if match:
-                manuscript_id = f"ms{match.group(2)}"
-            else:
-                # Fallback: try to extract manuscript_id from other fields if available
-                manuscript_id = descriptor.get("manuscript_id", "")
+        for file_group in files:
+            if not isinstance(file_group, list):
+                continue
+            for descriptor in file_group:
+             # Extract manuscript_id from descriptor['url'] or similar field
+                url = descriptor.get("url", "")
+                manuscript_id = None
+                # Example: url contains .../afc2019048_XXXX_msYYYY/...
+                import re
+                match = re.search(r'afc2019048_(\d{4})_ms(\w+)', url)
+                if match:
+                    manuscript_id = f"ms{match.group(2)}"
+                else:
+                    # Fallback: try to extract manuscript_id from other fields if available
+                    manuscript_id = descriptor.get("manuscript_id", "")
 
-            cursor.execute("""
-                INSERT INTO artifacts (
-                    block_id, manuscript_id, mimetype, height, width, levels, url, info, size, fulltext_service, word_coordinates
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                block_id,
-                manuscript_id,
-                descriptor.get("mimetype"),
-                descriptor.get("height"),
-                descriptor.get("width"),
-                descriptor.get("levels"),
-                descriptor.get("url"),
-                str(descriptor.get("info")) if descriptor.get("info") is not None else None,
-                descriptor.get("size"),
-                descriptor.get("fulltext_service"),
-                descriptor.get("word_coordinates")
-            ))
+                cursor.execute("""
+                    INSERT INTO artifacts (
+                        block_id, manuscript_id, mimetype, height, width, levels, url, info, size, fulltext_service, word_coordinates
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    block_id,
+                    manuscript_id,
+                    descriptor.get("mimetype"),
+                    descriptor.get("height"),
+                    descriptor.get("width"),
+                    descriptor.get("levels"),
+                    descriptor.get("url"),
+                    str(descriptor.get("info")) if descriptor.get("info") is not None else None,
+                    descriptor.get("size"),
+                    descriptor.get("fulltext_service"),
+                    descriptor.get("word_coordinates")
+                ))
     conn.commit()
     conn.close()
     logger.info(f"Inserted artifacts for block {block_id}")

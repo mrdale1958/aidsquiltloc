@@ -16,6 +16,8 @@ from typing import Dict, Optional
 import aiohttp
 import aiofiles
 import json
+import sqlite3
+import sys
 from simple_metadata_extractor import insert_block_into_db, extract_and_insert_artifacts
 
 # Configure structured logging
@@ -51,6 +53,21 @@ def fix_json_quotes(json_str: str) -> str:
     json_str = re.sub(r':\s*"([^"]*)"', escape_inside_strings, json_str)
     return json_str
 
+def block_exists(block_id: str, db_path: str) -> bool:
+    """
+    Check if a block_id already exists in the blocks table.
+    """
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT 1 FROM blocks WHERE block_id = ?", (block_id,))
+        exists = cursor.fetchone() is not None
+        conn.close()
+        return exists
+    except Exception as e:
+        logger.error("Error checking existence for block %s: %s", block_id, e)
+        return False
+
 async def fetch_block_metadata(block_id: str, output_dir: Path, db_path: str = "quilt_blocks.db") -> bool:
     """
     Fetch block metadata from LOC API, fix quotes, save as JSON, and insert into DB.
@@ -69,7 +86,11 @@ async def fetch_block_metadata(block_id: str, output_dir: Path, db_path: str = "
         async with aiohttp.ClientSession() as session:
             async with session.get(api_url, timeout=30) as resp:
                 if resp.status != 200:
-                    logger.error("Failed to fetch metadata for block %s: HTTP %d", block_id, resp.status)
+                    error_text = await resp.text()
+                    logger.error(
+                        "Failed to fetch metadata for block %s: HTTP %d | URL: %s ",
+                        block_id, resp.status, api_url # limit to 500 chars
+                    )
                     return False
                 raw_data = await resp.text()
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -90,11 +111,22 @@ async def fetch_block_metadata(block_id: str, output_dir: Path, db_path: str = "
         except Exception as e:
             logger.error("Error parsing fixed JSON for block %s: %s", block_id, e)
         return True
+    except asyncio.TimeoutError:
+        logger.error("Timeout fetching metadata for block %s | URL: %s", block_id, api_url)
+        logger.error("LOC Server slow or off. wait a minute before trying the next one")
+        #sys.exit(1)
+        await asyncio.sleep(60)  # Wait before retrying
     except aiohttp.ClientError as e:
-        logger.error("Network error fetching metadata for block %s: %s", block_id, e)
+        logger.error(
+            "Network error fetching metadata for block %s | URL: %s | Exception: %s: %s",
+            block_id, api_url, type(e).__name__, str(e)
+        )
         return False
     except Exception as e:
-        logger.error("Error fetching metadata for block %s: %s", block_id, e)
+        logger.error(
+            "Error fetching metadata for block %s | URL: %s | Exception: %s: %s",
+            block_id, api_url, type(e).__name__, str(e)
+        )
         return False
 
 async def scrape_blocks(start_id: int, end_id: int, mode: str, output_dir: Path, delay: float, db_path: str = "quilt_blocks.db") -> None:
@@ -113,6 +145,9 @@ async def scrape_blocks(start_id: int, end_id: int, mode: str, output_dir: Path,
     if mode == ScraperModes.METADATA:
         for block_num in range(start_id, end_id + 1):
             block_id = f"{block_num:04d}"
+            if block_exists(block_id, db_path):
+                logger.info("Skipping block %s: already exists in database.", block_id)
+                continue
             await fetch_block_metadata(block_id, output_dir, db_path)
             logger.info("Sleeping for %.1f seconds to respect rate limits...", delay)
             await asyncio.sleep(delay)
@@ -134,7 +169,7 @@ def main() -> None:
     parser.add_argument("--mode", choices=[ScraperModes.FULL, ScraperModes.METADATA, ScraperModes.IMAGES, ScraperModes.DB_SYNC], default=ScraperModes.METADATA, help="Scraper mode")
     parser.add_argument("--output-path", type=Path, default=Path("output/metadata"), help="Directory to save metadata files")
     parser.add_argument("--delay", type=float, default=30.0, help="Delay in seconds between fetches (default: 30)")
-    parser.add_argument("--db-path", type=str, default="quilt_record_simple.db", help="Path to SQLite database")
+    parser.add_argument("--db-path", type=str, default="quilt_records_simple.db", help="Path to SQLite database")
     args = parser.parse_args()
 
     asyncio.run(scrape_blocks(args.start_id, args.end_id, args.mode, args.output_path, args.delay, args.db_path))
