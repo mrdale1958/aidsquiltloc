@@ -7,9 +7,12 @@ import os
 import signal
 import threading
 import time
-from datetime import datetime
+import logging
+from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Tuple, List, Optional
+from typing import Tuple, List, Optional, Dict, Any
+import shutil
+import csv
 
 MAX_CONSECUTIVE_FAILURES = 10
 RETRY_DELAY_SECONDS = 60
@@ -19,51 +22,61 @@ MAX_PROGRESSIVE_BACKOFF = 3600  # 1 hour max
 
 # Global progress tracking
 class ProgressTracker:
-    def __init__(self):
-        self.total_artifacts = 0
+    """
+    Thread-safe progress tracker used by both async tasks and the dashboard thread.
+    Tracks current block for dashboard display.
+    """
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self.total = 0
         self.completed = 0
         self.failed = 0
-        self.current_block = ""
-        self.start_time = None
-        self.lock = threading.Lock()
+        self.start_time = datetime.now()
+        self.last_update = self.start_time
+        self.current_block: Optional[str] = None
 
-    def set_total(self, total):
-        with self.lock:
-            self.total_artifacts = total
-            self.start_time = datetime.now()
+    def set_total(self, total: int) -> None:
+        with self._lock:
+            self.total = int(total)
+            self.last_update = datetime.now()
 
-    def increment_completed(self, block_id):
-        with self.lock:
+    def set_current_block(self, block_id: Optional[str]) -> None:
+        with self._lock:
+            self.current_block = block_id
+            self.last_update = datetime.now()
+
+    def increment_completed(self, block_id: Optional[str] = None) -> None:
+        with self._lock:
             self.completed += 1
-            self.current_block = block_id
+            if block_id:
+                self.current_block = block_id
+            self.last_update = datetime.now()
 
-    def increment_failed(self, block_id):
-        with self.lock:
+    def increment_failed(self, block_id: Optional[str] = None) -> None:
+        with self._lock:
             self.failed += 1
-            self.current_block = block_id
+            if block_id:
+                self.current_block = block_id
+            self.last_update = datetime.now()
 
-    def get_stats(self):
-        with self.lock:
-            total_processed = self.completed + self.failed
-            if self.total_artifacts > 0:
-                percent = (total_processed / self.total_artifacts) * 100
-            else:
-                percent = 0
-
-            elapsed = None
-            if self.start_time:
-                elapsed = datetime.now() - self.start_time
-
+    def get_stats(self) -> Dict[str, Any]:
+        with self._lock:
+            elapsed = datetime.now() - self.start_time
             return {
-                'current_block': self.current_block,
-                'completed': self.completed,
-                'failed': self.failed,
-                'total': self.total_artifacts,
-                'percent': percent,
-                'elapsed': elapsed
+                "total": self.total,
+                "completed": self.completed,
+                "failed": self.failed,
+                "remaining": max(0, self.total - (self.completed + self.failed)),
+                "elapsed": elapsed,
+                "last_update": self.last_update,
+                "current_block": self.current_block,
             }
 
 progress = ProgressTracker()
+
+# Add a stop event the dashboard thread and main can use
+import threading
+dashboard_stop = threading.Event()
 
 def setup_logging():
     """Setup file logging and return logger."""
@@ -91,46 +104,78 @@ def setup_logging():
 
 logger = setup_logging()
 
-def display_dashboard():
-    """Display simple terminal dashboard."""
-    while True:
-        try:
+def display_dashboard(poll_interval: float = 1.0) -> None:
+    """
+    Runs in a background thread and prints a compact ASCII dashboard to stdout.
+    Uses a snapshot from progress.get_stats() to avoid locking the main thread.
+    Exits cleanly when dashboard_stop is set and prints one final snapshot without clearing.
+    """
+    try:
+        while not dashboard_stop.is_set():
             stats = progress.get_stats()
+            total = stats["total"]
+            completed = stats["completed"]
+            failed = stats["failed"]
+            remaining = stats["remaining"]
+            elapsed = stats["elapsed"]
+            current_block = stats.get("current_block") or "N/A"
+            percent = (completed / total * 100) if total else 0.0
 
-            # Clear screen and show dashboard
-            os.system('clear' if os.name == 'posix' else 'cls')
+            # clear screen for nicer single-frame dashboard if possible
+            try:
+                if os.name == "nt":
+                    os.system("cls")
+                else:
+                    os.system("clear")
+            except Exception:
+                pass
+
+            # print dashboard
             print("=" * 60)
-            print("       AIDS Quilt Artifact Download Dashboard")
+            print("      AIDS Quilt Artifact Download Dashboard")
             print("=" * 60)
             print()
-            print(f"Current Block:     {stats['current_block']}")
-            print(f"Progress:          {stats['completed']:,} completed, {stats['failed']:,} failed")
-            print(f"Total:             {stats['total']:,} artifacts")
-            print(f"Completion:        {stats['percent']:.1f}%")
-
-            if stats['elapsed']:
-                elapsed_str = str(stats['elapsed']).split('.')[0]  # Remove microseconds
-                print(f"Elapsed Time:      {elapsed_str}")
-
-                # Calculate rate
-                total_seconds = stats['elapsed'].total_seconds()
-                if total_seconds > 0:
-                    rate = (stats['completed'] + stats['failed']) / total_seconds
-                    if rate > 0:
-                        remaining = (stats['total'] - stats['completed'] - stats['failed']) / rate
-                        eta_str = str(time.timedelta(seconds=int(remaining))).split('.')[0]
-                        print(f"Est. Time Left:    {eta_str}")
-                        print(f"Rate:              {rate:.1f} artifacts/sec")
-
+            print(f"Current Block: {current_block}")
+            print(f"Progress:          {completed} completed, {failed} failed")
+            print(f"Total:             {total} artifacts")
+            print(f"Completion:        {percent:.1f}%")
             print()
             print("Press Ctrl+C to stop")
             print("=" * 60)
+            try:
+                import sys
+                sys.stdout.flush()
+            except Exception:
+                pass
 
-            time.sleep(2)  # Update every 2 seconds
-        except KeyboardInterrupt:
-            break
+            time.sleep(poll_interval)
+
+        # final snapshot (do NOT clear screen) so final main output remains visible
+        stats = progress.get_stats()
+        total = stats["total"]
+        completed = stats["completed"]
+        failed = stats["failed"]
+        elapsed = stats["elapsed"]
+        current_block = stats.get("current_block") or "N/A"
+        percent = (completed / total * 100) if total else 0.0
+
+        print("\n" + "=" * 60)
+        print("      AIDS Quilt Artifact Download Dashboard (Final)")
+        print("=" * 60)
+        print()
+        print(f"Current Block: {current_block}")
+        print(f"Progress:          {completed} completed, {failed} failed")
+        print(f"Total:             {total} artifacts")
+        print(f"Completion:        {percent:.1f}%")
+        print("=" * 60)
+        try:
+            import sys
+            sys.stdout.flush()
         except Exception:
-            time.sleep(2)  # Continue on any error
+            pass
+
+    except Exception:
+        print("Dashboard thread terminated unexpectedly", flush=True)
 
 class GlobalErrorTracker:
     """Track consecutive server errors across all downloads to detect shutdown mode."""
@@ -204,7 +249,7 @@ def get_artifacts(
     query = (
         "SELECT uid, block_id, manuscript_id, mimetype, url "
         "FROM artifacts "
-        "WHERE url IS NOT NULL AND (downloaded IS NULL OR downloaded = 0) "
+        "WHERE url IS NOT NULL "
         "AND (url NOT LIKE '%iiif%' OR url LIKE '%pct:100%')"
     )
     params = []
@@ -374,18 +419,82 @@ async def download_artifacts(
             logger.info("Task cleanup completed.")
             raise
 
+async def check_artifacts(
+    db_path: str,
+    output_dir: Path,
+    block_ids: Optional[List[str]] = None,
+    limit: Optional[int] = None,
+) -> None:
+    """
+    Verify that artifact files expected by the DB exist on disk and are non-empty.
+    Produces a CSV report of missing or zero-length artifact files.
+    """
+    artifacts = get_artifacts(db_path, block_ids, limit)
+    progress.set_total(len(artifacts))
+    logger.info("Found %d artifacts to verify.", len(artifacts))
+
+    missing: List[Dict[str, Optional[str]]] = []
+
+    for uid, block_id, manuscript_id, mimetype, url in artifacts:
+        filename = get_filename_from_url(url)
+        safe_mimetype = mimetype.replace("/", "_") if mimetype else "unknown"
+        dest_path = output_dir / f"block_{block_id}" / f"manuscript_{manuscript_id}" / safe_mimetype / filename
+
+        try:
+            if dest_path.exists() and dest_path.is_file() and dest_path.stat().st_size > 0:
+                progress.increment_completed(block_id)
+                logger.debug("[CHECK %s] Present: %s", block_id, dest_path)
+            else:
+                logger.debug("[CHECK %s] Missing or zero-length: %s", block_id, dest_path)
+                missing.append({
+                    "uid": str(uid),
+                    "block_id": str(block_id),
+                    "manuscript_id": str(manuscript_id),
+                    "mimetype": mimetype or "",
+                    "url": url,
+                    "expected_path": str(dest_path),
+                })
+                progress.increment_failed(block_id)
+        except Exception as e:
+            logger.warning("[CHECK %s] Error inspecting %s: %s", block_id, dest_path, e)
+            missing.append({
+                "uid": str(uid),
+                "block_id": str(block_id),
+                "manuscript_id": str(manuscript_id),
+                "mimetype": mimetype or "",
+                "url": url,
+                "expected_path": str(dest_path),
+            })
+            progress.increment_failed(block_id)
+
+    logger.info("Verification complete: %d missing/zero-length, %d present", len(missing), progress.completed)
+
+    # write CSV report of missing entries
+    report_path = output_dir / "verification_missing_report.csv"
+    try:
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        with report_path.open("w", encoding="utf-8", newline="") as fh:
+            writer = csv.DictWriter(fh, fieldnames=["uid", "block_id", "manuscript_id", "mimetype", "url", "expected_path"])
+            writer.writeheader()
+            for row in missing:
+                writer.writerow(row)
+        logger.info("Wrote verification report: %s", report_path.resolve())
+    except Exception as e:
+        logger.error("Failed to write verification report %s: %s", report_path, e)
+
 async def main():
     """Main function with proper signal handling."""
     parser = argparse.ArgumentParser(description="Download artifact files from the database.")
-    parser.add_argument("--db-path", type=str, default="quilt_records_simple.db", help="Path to SQLite database")
-    parser.add_argument("--output-dir", type=Path, default=Path("/Users/dalemacdonald/Library/Mobile Documents/com~apple~CloudDocs/LOCData/artifacts"), help="Directory to save downloaded files")
+    parser.add_argument("--db-path", type=str, default="D:/LOCData/quilt_records_simple.db", help="Path to SQLite database")
+    parser.add_argument("--output-dir", type=Path, default=Path("D:/LOCData/artifacts"), help="Directory to save downloaded files")
     parser.add_argument("--max-concurrent", type=int, default=4, help="Max concurrent downloads")
     parser.add_argument("--limit", type=int, default=None, help="Limit number of artifacts to process")
     parser.add_argument("--blocks", type=str, nargs="*", default=None, help="Specific block_id(s) to process")
+    parser.add_argument("--verify-downloads", action="store_true", help="Do not download; verify files exist on disk and report missing")
     args = parser.parse_args()
 
     # Start dashboard in a separate thread
-    dashboard_thread = threading.Thread(target=display_dashboard, daemon=True)
+    dashboard_thread = threading.Thread(target=display_dashboard, daemon=False)
     dashboard_thread.start()
 
     # Give dashboard a moment to start
@@ -395,30 +504,45 @@ async def main():
     loop = asyncio.get_running_loop()
 
     def signal_handler():
-        logger.info("Received interrupt signal, cancelling downloads...")
+        logger.info("Received interrupt signal, cancelling downloads/checks...")
         for task in asyncio.all_tasks(loop):
             if task is not asyncio.current_task():
                 task.cancel()
 
     for sig in (signal.SIGTERM, signal.SIGINT):
-        loop.add_signal_handler(sig, signal_handler)
+        try:
+            loop.add_signal_handler(sig, signal_handler)
+        except NotImplementedError:
+            logger.warning(f"Signal handling not implemented for {sig} on this platform.")
 
     try:
-        await download_artifacts(
-            db_path=args.db_path,
-            output_dir=args.output_dir,
-            block_ids=args.blocks,
-            limit=args.limit,
-            max_concurrent=args.max_concurrent
-        )
+        if args.verify_downloads:
+            await check_artifacts(
+                db_path=args.db_path,
+                output_dir=args.output_dir,
+                block_ids=args.blocks,
+                limit=args.limit
+            )
+        else:
+            await download_artifacts(
+                db_path=args.db_path,
+                output_dir=args.output_dir,
+                block_ids=args.blocks,
+                limit=args.limit,
+                max_concurrent=args.max_concurrent
+            )
     except KeyboardInterrupt:
         logger.info("Interrupted by user")
     except asyncio.CancelledError:
-        logger.info("Downloads cancelled")
+        logger.info("Operation cancelled")
     finally:
+        # Stop dashboard and wait briefly so it prints final snapshot before main prints summary
+        dashboard_stop.set()
+        if dashboard_thread.is_alive():
+            dashboard_thread.join(timeout=3)
         # Show final stats
         stats = progress.get_stats()
-        print(f"\nDownload completed!")
+        print(f"\nOperation completed!")
         print(f"Completed: {stats['completed']:,}")
         print(f"Failed: {stats['failed']:,}")
         print(f"Total: {stats['total']:,}")

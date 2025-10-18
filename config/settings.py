@@ -31,8 +31,8 @@ class ScraperConfig:
         chunk_size: File download chunk size in bytes
     """
     
-    output_dir: Path = Path("output")
-    database_path: Path = Path("output/quilt_data.db")
+    output_dir: Path = Path("D:\LOCData")
+    database_path: Path = Path("d:\LOCData\quilt_records_simple")
     rate_limit_delay: float = 1.0
     max_concurrent_downloads: int = 5
     request_timeout: int = 30
